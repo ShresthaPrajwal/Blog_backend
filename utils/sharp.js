@@ -2,10 +2,11 @@ const sharp = require('sharp');
 const path = require('path');
 const config = require('../config/config');
 
-const resizeAndSaveImage = async (imagePath,uuid) => {
+const resizeAndSaveImage = async (imagePath, uuid) => {
   const originalImage = sharp(imagePath);
-  const metadata = await originalImage.metadata();
 
+  const metadata = await originalImage.metadata();
+  console.log(metadata);
   const resolutions = [
     {
       width: 800,
@@ -26,9 +27,12 @@ const resizeAndSaveImage = async (imagePath,uuid) => {
   ];
   const resizedImages = [];
   for (const resolution of resolutions) {
-    const resizedImageBuffer = await originalImage
-      .resize(resolution.width, resolution.height)
-      .toBuffer();
+    const resizedImageBuffer =
+      metadata.width < resolution.width
+        ? await originalImage.toBuffer()
+        : await originalImage
+            .resize(resolution.width, resolution.height)
+            .toBuffer();
 
     const folderName = (function () {
       switch (true) {
@@ -46,12 +50,12 @@ const resizeAndSaveImage = async (imagePath,uuid) => {
     const folderPath = path.join(config.UPLOADS_DIR, folderName);
     await createFolderIfNotExists(folderPath);
 
-    // console.log(path.basename(imagePath));
     const resizedFilename = `${
       path.basename(imagePath).split('.')[0]
     }-${folderName}-${uuid}.jpg`;
     const resizedImagePath = path.join(folderPath, resizedFilename);
     const normalizedPath = resizedImagePath.split(path.sep).join('/');
+
     await sharp(resizedImageBuffer).toFile(resizedImagePath);
     resizedImages.push({
       size: folderName,
@@ -65,15 +69,14 @@ const resizeAndSaveImage = async (imagePath,uuid) => {
 
 // Helper function to create folder if it doesn't exist
 const createFolderIfNotExists = async (folderPath) => {
-  const fs = require('fs').promises; // Import file system promises
+  const fs = require('fs').promises;
   try {
-    await fs.access(folderPath); // Check if folder exists
+    await fs.access(folderPath);
   } catch (error) {
     if (error.code === 'ENOENT') {
-      // If folder doesn't exist, create it
       await fs.mkdir(folderPath);
     } else {
-      throw error; // Re-throw other errors
+      throw error;
     }
   }
 };
