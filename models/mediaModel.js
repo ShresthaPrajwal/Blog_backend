@@ -14,7 +14,7 @@ const mediaSchema = new mongoose.Schema({
       size: {
         type: String,
         required: true,
-        enum: ['large', 'medium', 'small', 'extrasmall'], // Enforces valid sizes
+        enum: ['large', 'medium', 'small', 'extrasmall'],
       },
       width: {
         type: Number,

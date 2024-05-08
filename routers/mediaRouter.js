@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const mediaController = require('../controllers/mediaController');
+const multerErrorHandler = require('../utils/multerError');
+const upload = require('../utils/multer');
+
 /**
  * @swagger
  * tags:
@@ -39,7 +42,12 @@ const mediaController = require('../controllers/mediaController');
  *       500:
  *         description: Internal server error
  */
-router.post('/upload', mediaController.uploadMedia);
+router.post(
+  '/upload',
+  upload.single('image'),
+  multerErrorHandler,
+  mediaController.uploadMedia,
+);
 /**
  * @swagger
  * /media/{id}:
@@ -61,6 +69,10 @@ router.post('/upload', mediaController.uploadMedia);
  *       500:
  *         description: Internal server error
  */
-router.get('/:id', mediaController.getMedia);
+router.get(
+  '/:id',
+ 
+  mediaController.getMedia,
+);
 
 module.exports = router;

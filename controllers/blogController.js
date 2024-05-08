@@ -3,12 +3,8 @@ const sharpUtils = require('../utils/sharp');
 const Blog = require('../models/blogModel');
 
 async function uploadImage(req, res) {
-  console.log(req.files);
-  if (!req.files) {
+  if (req.files.length==0) {
     return res.status(400).json({ message: 'No image uploaded' });
-  }
-  if (req.fileValidationError) {
-    return res.status(400).json({ message: req.fileValidationError });
   }
   try {
     const resizedImageArray = [];
