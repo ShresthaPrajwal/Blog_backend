@@ -17,10 +17,12 @@ async function uploadImage(req, res) {
     }
     newBlog.title = req.body.title || 'Title';
     newBlog.content = req.body.content || 'Content';
-    newBlog.featuredImage = resizedImageArray;
+    newBlog.featuredImage = req.body.featuredImage;
+    newBlog.media = req.body.media
 
-    await newBlog.save();
-
+    let savedBlog = await newBlog.save();
+    savedBlog = await Blog.findById(savedBlog.featuredImage).populate('Media')
+    
     res.json({
       message: 'Image uploaded successfully!',
       filename: req.files.map((file) => file.filename),

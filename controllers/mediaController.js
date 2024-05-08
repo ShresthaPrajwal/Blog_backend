@@ -14,7 +14,6 @@ async function uploadMedia(req, res) {
 
       const media = await Media.create({
         filename: req.file.filename,
-        uuid: req.generatedUUID,
         paths: resizedImages,
         featuredImage,
         alternateText,

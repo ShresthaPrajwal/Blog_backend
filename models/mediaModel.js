@@ -5,10 +5,6 @@ const mediaSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  uuid:{
-    type:String,
-    required: true,
-  },
   paths:[
     {
       size: {
