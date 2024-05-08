@@ -1,11 +1,9 @@
-const upload = require('../utils/multer');
-const multer = require('multer');
 const sharpUtils = require('../utils/sharp');
 const Media = require('../models/mediaModel');
 
 async function uploadMedia(req, res) {
   try {
-    console.log(req.file)
+    console.log(req.body)
       if (!req.file) {
         return res.status(400).json({ message: 'No file uploaded' });
       }
