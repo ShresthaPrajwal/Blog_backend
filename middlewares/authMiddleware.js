@@ -4,6 +4,10 @@ const jwt = require('jsonwebtoken');
 const authMiddleware = (request, response, next) => {
   let token;
   const authorization = request.get('Authorization');
+  console.log('From authMiddleware',authorization);
+  if(!authorization){
+    response.status(498).json({error: 'Invalid Token'})
+  }
   if (authorization && authorization.startsWith('Bearer')) {
     token = authorization.replace('Bearer ', '');
     try {

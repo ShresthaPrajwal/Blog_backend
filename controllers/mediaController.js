@@ -3,7 +3,7 @@ const Media = require('../models/mediaModel');
 
 async function uploadMedia(req, res) {
   try {
-    console.log(req.body)
+    console.log("From controller media",req.body)
       if (!req.file) {
         return res.status(400).json({ message: 'No file uploaded' });
       }
