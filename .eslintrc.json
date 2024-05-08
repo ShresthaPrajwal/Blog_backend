@@ -1,0 +1,20 @@
+{
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es2021": true
+  },
+  "extends": ["airbnb-base", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "rules": {
+    "no-console": "off",
+    "consistent-return": "off",
+    "global-require": "off",
+    "no-restricted-syntax": "off", // Disable iterators/generators require regenerator-runtime and loop restriction
+    "no-await-in-loop": "off", // Disable Unexpected `await` inside a loop
+    "func-names": "off", // Disable Unexpected unnamed function
+    "no-use-before-define": "off"
+  }
+}
