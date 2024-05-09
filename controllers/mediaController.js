@@ -40,7 +40,7 @@ async function uploadMedia(req, res) {
 
 async function getMedia(req, res) {
   try {
-    const media = await Media.findOne({ uuid: req.params.id });
+    const media = await Media.findById(req.params.id);
 
     if (!media) {
       const errorID = req.params.id;
