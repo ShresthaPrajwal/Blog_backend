@@ -33,8 +33,7 @@ async function uploadMedia(req, res) {
       },
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    next(error)
   }
 }
 
@@ -48,8 +47,7 @@ async function getAllMedia(req, res) {
       data: media,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    next(error)
   }
 }
 
@@ -76,8 +74,7 @@ async function getMediaById(req, res) {
       data: media,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    next(error)
   }
 }
 
@@ -103,12 +100,11 @@ async function editMedia(req, res) {
       data: updatedMedia,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    next(error)
   }
 }
 
-async function deleteMedia(req, res) {
+async function deleteMedia(req, res, next) {
   try {
     const mediaId = req.params.id;
 
@@ -131,8 +127,7 @@ async function deleteMedia(req, res) {
       success: 'true',
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+      next(error)
   }
 }
 
