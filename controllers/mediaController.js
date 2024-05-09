@@ -38,7 +38,22 @@ async function uploadMedia(req, res) {
   }
 }
 
-async function getMedia(req, res) {
+async function getAllMedia(req, res) {
+  try {
+    const media = await Media.find();
+    console.log('from getall', media);
+    res.json({
+      success: true,
+      message: `All Media Found`,
+      data: media,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+async function getMediaById(req, res) {
   try {
     const media = await Media.findById(req.params.id);
 
@@ -103,11 +118,10 @@ async function deleteMedia(req, res) {
       return res.status(404).json({ message: 'Media not found' });
     }
     const { featuredImage, paths } = media;
-    console.log(media)
+    console.log(media);
     const featuredImagePath = featuredImage;
     await fs.promises.unlink(featuredImagePath);
 
-    
     for (const image of paths) {
       const imagePath = image.path;
       await fs.promises.unlink(imagePath);
@@ -122,4 +136,10 @@ async function deleteMedia(req, res) {
   }
 }
 
-module.exports = { uploadMedia, getMedia, deleteMedia, editMedia };
+module.exports = {
+  uploadMedia,
+  getAllMedia,
+  getMediaById,
+  deleteMedia,
+  editMedia,
+};
