@@ -15,4 +15,8 @@ router.post(
 
 router.get('/:id', mediaController.getMedia);
 
+router.put('/:id', authMiddleware ,mediaController.editMedia)
+
+router.delete('/:id', authMiddleware,mediaController.deleteMedia)
+
 module.exports = router;
