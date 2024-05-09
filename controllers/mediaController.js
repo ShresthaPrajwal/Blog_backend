@@ -38,13 +38,24 @@ async function uploadMedia(req, res) {
 }
 
 async function getAllMedia(req, res) {
+  console.log(req.hostname, req.port, req.header('Host'));
   try {
     const media = await Media.find();
-    console.log('from getall', media);
+    
+    const baseUrl = `http://${req.header('Host')}`; 
+    console.log(media)
+    const mediaWithUrls = media.map(mediaItem => {
+      const pathsWithUrls = mediaItem.paths.map(path => {
+        const url = `${baseUrl}/${path.path}`;
+        return { ...path, url }; 
+      });
+      
+      return { ...mediaItem, paths: pathsWithUrls }; 
+    });
     res.json({
       success: true,
       message: `All Media Found`,
-      data: media,
+      data: mediaWithUrls,
     });
   } catch (error) {
     next(error)
