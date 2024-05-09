@@ -27,8 +27,7 @@ async function loginController(request, response) {
       .status(200)
       .send({ token, username: user.username, name: user.name });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    next(error)
   }
 }
 

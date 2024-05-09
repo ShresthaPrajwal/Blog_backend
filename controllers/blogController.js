@@ -29,11 +29,7 @@ async function uploadImage(req, res) {
       resizedImageArray,
     });
   } catch (err) {
-    if (err.code === 'LIMIT_FILE_SIZE') {
-      return res.status(413).json({ message: 'Image size exceeds 1MB limit' });
-    }
-    console.error(err);
-    res.status(500).json({ message: 'Internal server error' });
+    next(error)
   }
 }
 
