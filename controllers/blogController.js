@@ -1,36 +1,26 @@
-const sharpUtils = require('../utils/sharp');
-
 const Blog = require('../models/blogModel');
 
-async function uploadImage(req, res) {
-  if (req.files.length==0) {
-    return res.status(400).json({ message: 'No image uploaded' });
-  }
+async function uploadBlog(req, res) {
   try {
-    const resizedImageArray = [];
     const newBlog = new Blog();
-
-    for (const file of req.files) {
-      console.log(file);
-      const resizedImage = await sharpUtils.resizeAndSaveImage(file.path);
-      resizedImageArray.push({ imageName: file.filename, paths: resizedImage });
-    }
+    console.log(req.body)
     newBlog.title = req.body.title || 'Title';
     newBlog.content = req.body.content || 'Content';
     newBlog.featuredImage = req.body.featuredImage;
-    newBlog.media = req.body.media
+    newBlog.media = req.body.media;
 
     let savedBlog = await newBlog.save();
-    savedBlog = await Blog.findById(savedBlog.featuredImage).populate('Media')
-    
-    res.json({
-      message: 'Image uploaded successfully!',
-      filename: req.files.map((file) => file.filename),
-      resizedImageArray,
+    console.log(savedBlog)
+    savedBlog = await Blog.findById(savedBlog._id).populate('media').populate('featuredImage');
+
+    res.status(201).json({
+      message: 'Blog uploaded successfully!',
+      success:'true',
+      blog: savedBlog
     });
   } catch (err) {
-    next(error)
+    next(error);
   }
 }
 
-module.exports = { uploadImage }; // Export the function
+module.exports = { uploadBlog };

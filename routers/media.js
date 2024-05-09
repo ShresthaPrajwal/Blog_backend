@@ -13,13 +13,12 @@ router.post(
   mediaController.uploadMedia,
 );
 
-router.get('/all',mediaController.getAllMedia);
+router.get('/all', mediaController.getAllMedia);
 
 router.get('/:id', mediaController.getMediaById);
 
+router.put('/:id', authMiddleware, mediaController.editMedia);
 
-router.put('/:id', authMiddleware ,mediaController.editMedia);
-
-router.delete('/:id', authMiddleware,mediaController.deleteMedia);
+router.delete('/:id', authMiddleware, mediaController.deleteMedia);
 
 module.exports = router;
