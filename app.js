@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const config = require('./config/config');
 const logger = require('./utils/logger');
 const middleware = require('./middlewares/middleware');
+const errorHandler = require('./middlewares/errorHandlerMiddleware')
 const swaggerSetup = require('./config/swagger')
 const router = require('./routers/index')
 
@@ -35,6 +36,6 @@ swaggerSetup(app)
 app.use('/api', router);
 
 app.use(middleware.unknownEndpoints);
-app.use(middleware.errorHandler);
+app.use(errorHandler);
 
 module.exports = app;

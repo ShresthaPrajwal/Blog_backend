@@ -31,8 +31,7 @@ const addUser =  async (request, response) => {
     response.status(201).json(savedUser);
   }
   catch(error){
-    console.error(error);
-    response.status(500).json({ message: 'Internal server error' });
+    next(error)
   }
 };
 
