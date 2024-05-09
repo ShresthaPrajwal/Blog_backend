@@ -15,8 +15,9 @@ const errorHandler = (error, request, response, next) => {
       error: 'token expired',
     });
   }
-
-  next(error);
+  else{
+    return response.status(error.status|| 500).json({error:err.message})
+  }
 };
 
 module.exports = errorHandler
