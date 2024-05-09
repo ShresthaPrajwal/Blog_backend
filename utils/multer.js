@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
   },
   filename(req, file, cb) {
     const sanitizedFilename = file.originalname.replace(/[^a-z0-9.-]/gi, '-');
-    const uuid = uuidv4(); // Generate UUID
+    const uuid = uuidv4();
     req.generatedUUID = uuid;
     const filenameWithUUID = `${uuid}-${sanitizedFilename}`;
     cb(null, filenameWithUUID);

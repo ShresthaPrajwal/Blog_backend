@@ -3,12 +3,8 @@ const sharpUtils = require('../utils/sharp');
 const Blog = require('../models/blogModel');
 
 async function uploadImage(req, res) {
-  console.log(req.files);
-  if (!req.files) {
+  if (req.files.length==0) {
     return res.status(400).json({ message: 'No image uploaded' });
-  }
-  if (req.fileValidationError) {
-    return res.status(400).json({ message: req.fileValidationError });
   }
   try {
     const resizedImageArray = [];
@@ -21,10 +17,12 @@ async function uploadImage(req, res) {
     }
     newBlog.title = req.body.title || 'Title';
     newBlog.content = req.body.content || 'Content';
-    newBlog.featuredImage = resizedImageArray;
+    newBlog.featuredImage = req.body.featuredImage;
+    newBlog.media = req.body.media
 
-    await newBlog.save();
-
+    let savedBlog = await newBlog.save();
+    savedBlog = await Blog.findById(savedBlog.featuredImage).populate('Media')
+    
     res.json({
       message: 'Image uploaded successfully!',
       filename: req.files.map((file) => file.filename),

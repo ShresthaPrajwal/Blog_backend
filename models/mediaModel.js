@@ -5,16 +5,12 @@ const mediaSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  uuid:{
-    type:String,
-    required: true,
-  },
   paths:[
     {
       size: {
         type: String,
         required: true,
-        enum: ['large', 'medium', 'small', 'extrasmall'], // Enforces valid sizes
+        enum: ['large', 'medium', 'small', 'extrasmall'],
       },
       width: {
         type: Number,
