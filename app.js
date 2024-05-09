@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const config = require('./config/config');
 const logger = require('./utils/logger');
 const middleware = require('./middlewares/middleware');
-const errorHandler = require('./middlewares/errorHandlerMiddleware')
+const errorHandler = require('./middlewares/errorHandler')
 const swaggerSetup = require('./config/swagger')
 const router = require('./routers/index')
 
