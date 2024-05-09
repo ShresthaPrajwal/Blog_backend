@@ -1,14 +1,7 @@
 const blogRouter = require('express').Router();
-
-const upload = require('../utils/multer');
 const blogController = require('../controllers/blogController');
-const multerErrorHandler = require('../utils/multerError');
+const authMiddleware = require('../middlewares/authMiddleware');
 
-blogRouter.post(
-  '/upload',
-  upload.array('image', 5),
-  multerErrorHandler,
-  blogController.uploadImage,
-);
+blogRouter.post('/upload',authMiddleware,blogController.uploadBlog);
 
 module.exports = blogRouter;
