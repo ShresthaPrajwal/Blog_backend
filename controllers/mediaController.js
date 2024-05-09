@@ -104,7 +104,7 @@ async function editMedia(req, res) {
   }
 }
 
-async function deleteMedia(req, res) {
+async function deleteMedia(req, res, next) {
   try {
     const mediaId = req.params.id;
 
