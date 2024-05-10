@@ -6,23 +6,34 @@ const getMediaWithUrls = require('../utils/getMedia')
 async function uploadMedia(req, res , next ) {
   try {
     console.log('From controller media', req.body);
-    if (!req.file) {
-      return res.status(400).json({ message: 'No file uploaded' });
+    if (!req.files || req.files.length === 0) {
+      const error = new Error('No files uploaded')
+      error.status = 400
+      next(error)
     }
-    const resizedImages = await sharpUtils.resizeAndSaveImage(req.file.path);
 
-    const featuredImage = req.file.path;
-    const { alternateText, caption } = req.body;
-
-    const media = await Media.create({
-      filename: req.file.filename,
-      paths: resizedImages,
-      featuredImage,
-      alternateText,
-      caption,
+    const resizedImagesPromises = req.files.map(async (file) => {
+      return await sharpUtils.resizeAndSaveImage(file.path);
     });
-    console.log(media)
-    const mediaWithUrls = getMediaWithUrls(req,media,next)
+
+    const resizedImages = await Promise.all(resizedImagesPromises);
+
+    const mediaObjects = req.files.map((file, index) => {
+      return {
+        filename: file.filename,
+        paths: resizedImages[index],
+        featuredImage: file.path, 
+        alternateText: req.body[`alternateText-${index + 1}`], 
+        caption: req.body[`caption-${index + 1}`], 
+      };
+    });
+    const createdMedia = await Promise.all(
+      mediaObjects.map((media) => Media.create(media)),
+    );
+
+    const mediaWithUrls = await Promise.all(
+      createdMedia.map(async (media) => getMediaWithUrls(req, media, next)),
+    );
 
     res.status(201).json({
       message: 'Media uploaded successfully',
