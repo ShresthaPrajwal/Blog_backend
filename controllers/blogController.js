@@ -15,7 +15,7 @@ async function uploadBlog(req, res, next) {
       .populate('media')
       .populate('featuredImage');
 
-    const savedBlogWithUpdatedUrl = getBlogWithUrl(req,savedBlog,next)
+    const savedBlogWithUpdatedUrl = getBlogWithUrl(req, savedBlog, next);
 
     res.status(201).json({
       message: 'Blog uploaded successfully!',
@@ -48,12 +48,12 @@ async function getBlogById(req, res, next) {
       .populate('media')
       .populate('featuredImage');
     if (!blog) {
-      const error = new Error('Blog not found')
-      error.status(404)
-      next(error)
+      const error = new Error('Blog not found');
+      error.status(404);
+      next(error);
     }
-    const blogWithUrl = getBlogWithUrl(req,blog,next)
-    
+    const blogWithUrl = getBlogWithUrl(req, blog, next);
+
     res.status(200).json({
       success: true,
       data: blogWithUrl,
@@ -63,5 +63,53 @@ async function getBlogById(req, res, next) {
   }
 }
 
+async function updateBlog(req, res, next) {
+  try {
+    const blogId = req.params.id;
+    const { title, content, featuredImage, media } = req.body;
 
-module.exports = { uploadBlog, getAllBlogs, getBlogById };
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      blogId,
+      { title, content, featuredImage, media },
+      { new: true },
+    )
+      .populate('media')
+      .populate('featuredImage');
+
+    if (!updatedBlog) {
+      const error = new Error('Blog not found');
+      error.status(404);
+      next(error);
+    }
+
+    const updatedblogWithUrl = getBlogWithUrl(req, updatedBlog, next);
+
+    res.status(200).json({
+      success: true,
+      message: 'Blog updated successfully',
+      data: updatedblogWithUrl,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+async function deleteBlog(req, res, next) {
+  try {
+    const blogId = req.params.id;
+    const deletedBlog = await Blog.findByIdAndDelete(blogId);
+    if (!deletedBlog) {
+      const error = new Error('Blog not found')
+      error.status(404)
+      next(error)
+    }
+    res.status(200).json({
+      success: true,
+      message: 'Blog deleted successfully',
+      data: deletedBlog,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { uploadBlog, getAllBlogs, getBlogById , updateBlog , deleteBlog };
