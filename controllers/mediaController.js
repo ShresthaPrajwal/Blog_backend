@@ -1,8 +1,9 @@
 const sharpUtils = require('../utils/sharp');
 const Media = require('../models/mediaModel');
 const fs = require('fs');
+const getMediaWithUrls = require('../utils/getMedia')
 
-async function uploadMedia(req, res) {
+async function uploadMedia(req, res , next ) {
   try {
     console.log('From controller media', req.body);
     if (!req.file) {
@@ -20,38 +21,24 @@ async function uploadMedia(req, res) {
       alternateText,
       caption,
     });
+    console.log(media)
+    const mediaWithUrls = getMediaWithUrls(req,media,next)
 
     res.status(201).json({
       message: 'Media uploaded successfully',
-      success: 'true',
-      data: {
-        filename: media.filename,
-        paths: media.paths,
-        featuredImage: media.featuredImage,
-        alternateText: media.alternateText,
-        caption: media.caption,
-      },
+      success: true,
+      data: mediaWithUrls,
     });
   } catch (error) {
     next(error)
   }
 }
 
-async function getAllMedia(req, res) {
-  console.log(req.hostname, req.port, req.header('Host'));
+async function getAllMedia(req, res,next) {
   try {
     const media = await Media.find();
+    const mediaWithUrls = getMediaWithUrls(req,media,next);
     
-    const baseUrl = `http://${req.header('Host')}`; 
-    console.log(media)
-    const mediaWithUrls = media.map(mediaItem => {
-      const pathsWithUrls = mediaItem.paths.map(path => {
-        const url = `${baseUrl}/${path.path}`;
-        return { ...path, url }; 
-      });
-      
-      return { ...mediaItem, paths: pathsWithUrls }; 
-    });
     res.json({
       success: true,
       message: `All Media Found`,
@@ -62,27 +49,21 @@ async function getAllMedia(req, res) {
   }
 }
 
-async function getMediaById(req, res) {
+async function getMediaById(req, res , next) {
   try {
     const media = await Media.findById(req.params.id);
-
+    console.log(media);
     if (!media) {
-      const errorID = req.params.id;
-      const message = 'Media not found';
-      const details = `The requested media with ID ${req.params.id} was not found.`;
-      const timestamp = new Date().toISOString();
-
-      const errorFormat =
-        process.env.NODE_ENV === 'production'
-          ? { errorID, message, timestamp }
-          : { errorID, message, details, timestamp };
-
-      return res.status(404).json({ success: false, error: errorFormat });
+      const error = new Error('Media Not Found');
+      error.status = 404;
+      next(error);
     }
+    const mediaWithUrls = getMediaWithUrls(req, media, next);
+    
     res.json({
       success: true,
       message: `Requested Media Found`,
-      data: media,
+      data: mediaWithUrls,
     });
   } catch (error) {
     next(error)
