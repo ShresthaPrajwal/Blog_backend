@@ -6,14 +6,14 @@ const upload = require('../utils/multer');
 const authMiddleware = require('../middlewares/authMiddleware');
 
 router.post(
-  '/upload',
+  '/',
   upload.array('image'),
   multerErrorHandler,
   authMiddleware,
   mediaController.uploadMedia,
 );
 
-router.get('/all', mediaController.getAllMedia);
+router.get('/', mediaController.getAllMedia);
 
 router.get('/:id', mediaController.getMediaById);
 
