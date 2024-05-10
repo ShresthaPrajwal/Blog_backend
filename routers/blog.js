@@ -6,4 +6,6 @@ blogRouter.post('/',authMiddleware,blogController.uploadBlog);
 
 blogRouter.get('/',blogController.getAllBlogs)
 
+blogRouter.get('/:id',blogController.getBlogById)
+
 module.exports = blogRouter;

@@ -48,14 +48,15 @@ async function getBlogById(req, res, next) {
       .populate('media')
       .populate('featuredImage');
     if (!blog) {
-      return res.status(404).json({
-        success: false,
-        message: 'Blog not found',
-      });
+      const error = new Error('Blog not found')
+      error.status(404)
+      next(error)
     }
+    const blogWithUrl = getBlogWithUrl(req,blog,next)
+    
     res.status(200).json({
       success: true,
-      data: blog,
+      data: blogWithUrl,
     });
   } catch (error) {
     next(error);
