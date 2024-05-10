@@ -117,7 +117,6 @@ async function deleteMedia(req, res, next) {
       return res.status(404).json({ message: 'Media not found' });
     }
     const { featuredImage, paths } = media;
-    console.log(media);
     const featuredImagePath = featuredImage;
     await fs.promises.unlink(featuredImagePath);
 
