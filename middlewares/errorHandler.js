@@ -6,17 +6,22 @@ const errorHandler = (error, request, response, next) => {
   logger.error(error.message);
   console.error(error.message);
   const errorId = uuidv4();
+  const timestamp = new Date().toISOString();
 
   if (config.NODE_ENV === 'development') {
-    res.status(error.status || 500).json({
+    response.status(error.status || 500).json({
       errorId,
       message: error.message,
       stack: error.stack,
+      success: false,
+      timestamp
     });
   } else {
-    res.status(error.status || 500).json({
+    response.status(error.status || 500).json({
       errorId,
       message: error.message,
+      success: false,
+      timestamp
     });
   }
   next();
