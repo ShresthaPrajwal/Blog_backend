@@ -63,7 +63,7 @@ async function getMediaById(req, res, next) {
     if (!media) {
       const error = new Error('Media Not Found');
       error.status = 404;
-      next(error);
+      throw error;
     }
     const mediaWithUrls = getMediaWithUrls(req, media, next);
 
