@@ -23,7 +23,7 @@ async function uploadBlog(req, res, next) {
       data: savedBlogWithUpdatedUrl,
     });
   } catch (err) {
-    next(error);
+    next(err);
   }
 }
 
@@ -98,9 +98,9 @@ async function deleteBlog(req, res, next) {
     const blogId = req.params.id;
     const deletedBlog = await Blog.findByIdAndDelete(blogId);
     if (!deletedBlog) {
-      const error = new Error('Blog not found')
-      error.status(404)
-      next(error)
+      const error = new Error('Blog not found');
+      error.status(404);
+      next(error);
     }
     res.status(200).json({
       success: true,
@@ -112,4 +112,10 @@ async function deleteBlog(req, res, next) {
   }
 }
 
-module.exports = { uploadBlog, getAllBlogs, getBlogById , updateBlog , deleteBlog };
+module.exports = {
+  uploadBlog,
+  getAllBlogs,
+  getBlogById,
+  updateBlog,
+  deleteBlog,
+};

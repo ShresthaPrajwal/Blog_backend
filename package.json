@@ -10,7 +10,7 @@
     "format": "prettier --write .",
     "fix": "eslint --fix .",
     "test-all": "npm run format && npm run fix && npm run check-lint && npm run check-format",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "author": "",
   "license": "ISC",

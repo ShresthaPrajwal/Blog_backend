@@ -5,7 +5,7 @@ const mediaSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  paths:[
+  paths: [
     {
       size: {
         type: String,

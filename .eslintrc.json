@@ -15,6 +15,9 @@
     "no-restricted-syntax": "off", // Disable iterators/generators require regenerator-runtime and loop restriction
     "no-await-in-loop": "off", // Disable Unexpected `await` inside a loop
     "func-names": "off", // Disable Unexpected unnamed function
-    "no-use-before-define": "off"
+    "no-use-before-define": "off",
+    "no-param-reassign": "off",
+    "no-underscore-dangle": "off",
+    "no-return-await": "off"
   }
 }

@@ -3,9 +3,9 @@ const bcrypt = require('bcrypt');
 const { SECRET } = require('../config/config');
 const User = require('../models/usersModel');
 
-async function loginController(request, response) {
+async function loginController(request, response, next) {
   try {
-    console.log(request.body)
+    console.log(request.body);
     const { username, password } = request.body;
 
     const user = await User.findOne({ username });
@@ -27,7 +27,7 @@ async function loginController(request, response) {
       .status(200)
       .send({ token, username: user.username, name: user.name });
   } catch (error) {
-    next(error)
+    next(error);
   }
 }
 

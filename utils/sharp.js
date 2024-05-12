@@ -3,7 +3,7 @@ const path = require('path');
 const config = require('../config/config');
 
 const resizeAndSaveImage = async (imagePath, uuid) => {
-  try{
+  try {
     const originalImage = sharp(imagePath);
 
     const metadata = await originalImage.metadata();
@@ -65,13 +65,10 @@ const resizeAndSaveImage = async (imagePath, uuid) => {
     }
 
     return resizedImages;
-  }
-  catch(error){
-
-    console.error('Error processing Image:',error)
+  } catch (error) {
+    console.error('Error processing Image:', error);
     throw error;
   }
-  
 };
 
 // Helper function to create folder if it doesn't exist

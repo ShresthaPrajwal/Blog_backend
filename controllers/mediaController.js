@@ -1,32 +1,30 @@
+const fs = require('fs');
 const sharpUtils = require('../utils/sharp');
 const Media = require('../models/mediaModel');
-const fs = require('fs');
-const getMediaWithUrls = require('../utils/getMedia')
+const getMediaWithUrls = require('../utils/getMedia');
 
-async function uploadMedia(req, res , next ) {
+async function uploadMedia(req, res, next) {
   try {
     console.log('From controller media', req.body);
     if (!req.files || req.files.length === 0) {
-      const error = new Error('No files uploaded')
-      error.status = 400
-      next(error)
+      const error = new Error('No files uploaded');
+      error.status = 400;
+      next(error);
     }
 
-    const resizedImagesPromises = req.files.map(async (file) => {
-      return await sharpUtils.resizeAndSaveImage(file.path);
-    });
+    const resizedImagesPromises = req.files.map(
+      async (file) => await sharpUtils.resizeAndSaveImage(file.path),
+    );
 
     const resizedImages = await Promise.all(resizedImagesPromises);
 
-    const mediaObjects = req.files.map((file, index) => {
-      return {
-        filename: file.filename,
-        paths: resizedImages[index],
-        featuredImage: file.path, 
-        alternateText: req.body[`alternateText-${index + 1}`], 
-        caption: req.body[`caption-${index + 1}`], 
-      };
-    });
+    const mediaObjects = req.files.map((file, index) => ({
+      filename: file.filename,
+      paths: resizedImages[index],
+      featuredImage: file.path,
+      alternateText: req.body[`alternateText-${index + 1}`],
+      caption: req.body[`caption-${index + 1}`],
+    }));
     const createdMedia = await Promise.all(
       mediaObjects.map((media) => Media.create(media)),
     );
@@ -41,26 +39,26 @@ async function uploadMedia(req, res , next ) {
       data: mediaWithUrls,
     });
   } catch (error) {
-    next(error)
+    next(error);
   }
 }
 
-async function getAllMedia(req, res,next) {
+async function getAllMedia(req, res, next) {
   try {
     const media = await Media.find();
-    const mediaWithUrls = getMediaWithUrls(req,media,next);
-    
+    const mediaWithUrls = getMediaWithUrls(req, media, next);
+
     res.json({
       success: true,
       message: `All Media Found`,
       data: mediaWithUrls,
     });
   } catch (error) {
-    next(error)
+    next(error);
   }
 }
 
-async function getMediaById(req, res , next) {
+async function getMediaById(req, res, next) {
   try {
     const media = await Media.findById(req.params.id);
     console.log(media);
@@ -70,18 +68,18 @@ async function getMediaById(req, res , next) {
       next(error);
     }
     const mediaWithUrls = getMediaWithUrls(req, media, next);
-    
+
     res.json({
       success: true,
       message: `Requested Media Found`,
       data: mediaWithUrls,
     });
   } catch (error) {
-    next(error)
+    next(error);
   }
 }
 
-async function editMedia(req, res) {
+async function editMedia(req, res, next) {
   try {
     const { alternateText, caption } = req.body;
     const mediaId = req.params.id;
@@ -103,7 +101,7 @@ async function editMedia(req, res) {
       data: updatedMedia,
     });
   } catch (error) {
-    next(error)
+    next(error);
   }
 }
 
@@ -129,7 +127,7 @@ async function deleteMedia(req, res, next) {
       success: 'true',
     });
   } catch (error) {
-      next(error)
+    next(error);
   }
 }
 

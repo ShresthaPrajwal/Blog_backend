@@ -14,14 +14,14 @@ const errorHandler = (error, request, response, next) => {
       message: error.message,
       stack: error.stack,
       success: false,
-      timestamp
+      timestamp,
     });
   } else {
     response.status(error.status || 500).json({
       errorId,
       message: error.message,
       success: false,
-      timestamp
+      timestamp,
     });
   }
   next();

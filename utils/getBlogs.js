@@ -12,15 +12,14 @@ const getBlogWithUrl = (req, blog, next) => {
         };
         return blogWithUpdatedUrl;
       });
-      return blogsWithUpdatedUrl
-    } else {
-        if (blog instanceof Blog) blog = blog.toObject();
-        const blogWithUpdatedUrl = {
-          ...blog,
-          media: getMediaWithUrls(req, blog.media, next),
-        };
-        return blogWithUpdatedUrl
+      return blogsWithUpdatedUrl;
     }
+    if (blog instanceof Blog) blog = blog.toObject();
+    const blogWithUpdatedUrl = {
+      ...blog,
+      media: getMediaWithUrls(req, blog.media, next),
+    };
+    return blogWithUpdatedUrl;
   } catch (error) {
     next(error);
   }

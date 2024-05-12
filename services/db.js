@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
 const config = require('../config/config');
-const MONGO_URI = config.MONGO_URI;
+
+const { MONGO_URI } = config;
 
 mongoose.set('strictQuery', false);
 

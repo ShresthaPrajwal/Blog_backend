@@ -1,7 +1,7 @@
 const multer = require('multer');
 
 const multerErrorHandler = (err, req, res, next) => {
-    console.log("From multerErrorHandler" ,req.files)
+  console.log('From multerErrorHandler', req.files);
   if (err instanceof multer.MulterError) {
     if (err.code === 'LIMIT_FILE_SIZE') {
       return res
@@ -11,7 +11,8 @@ const multerErrorHandler = (err, req, res, next) => {
     return res
       .status(500)
       .json({ message: 'Multer error', error: err.message });
-  } else if (err) {
+  }
+  if (err) {
     return res
       .status(500)
       .json({ message: 'Internal server error', error: err.message });
@@ -19,4 +20,4 @@ const multerErrorHandler = (err, req, res, next) => {
   next();
 };
 
-module.exports = multerErrorHandler
+module.exports = multerErrorHandler;

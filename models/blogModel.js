@@ -10,7 +10,7 @@ const mongoose = require('mongoose');
 //       size: {
 //         type: String,
 //         required: true,
-//         enum: ['large', 'medium', 'small', 'extrasmall'], 
+//         enum: ['large', 'medium', 'small', 'extrasmall'],
 //       },
 //       width: {
 //         type: Number,

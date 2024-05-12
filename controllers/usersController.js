@@ -1,14 +1,14 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/usersModel');
 
-const getUser =  async (request, response) => {
+const getUser = async (request, response) => {
   const users = await User.find({});
   response.json(users);
 };
 
-const addUser =  async (request, response) => {
-  try{
-    console.log(request.body)
+const addUser = async (request, response, next) => {
+  try {
+    console.log(request.body);
     const { username, name, password } = request.body;
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(password, saltRounds);
@@ -29,13 +29,12 @@ const addUser =  async (request, response) => {
     const savedUser = await user.save();
 
     response.status(201).json(savedUser);
-  }
-  catch(error){
-    next(error)
+  } catch (error) {
+    next(error);
   }
 };
 
 module.exports = {
   addUser,
-  getUser
+  getUser,
 };

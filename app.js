@@ -1,13 +1,12 @@
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 
-const mongoose = require('./services/db');
+require('./services/db');
 const middleware = require('./middlewares/middleware');
-const errorHandler = require('./middlewares/errorHandler')
-const swaggerSetup = require('./config/swagger')
-const router = require('./routers/index')
-
+const errorHandler = require('./middlewares/errorHandler');
+const swaggerSetup = require('./config/swagger');
+const router = require('./routers/index');
 
 const app = express();
 
@@ -17,7 +16,7 @@ app.use(express.json());
 app.use(middleware.requestLogger);
 app.use(bodyParser.urlencoded({ extended: true }));
 
-swaggerSetup(app)
+swaggerSetup(app);
 
 app.use('/api', router);
 
