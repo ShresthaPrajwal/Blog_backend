@@ -10,11 +10,9 @@ async function uploadBlog(req, res, next) {
     newBlog.featuredImage = req.body.featuredImage;
     newBlog.media = req.body.media;
 
-    let savedBlog = await newBlog
+    const savedBlog = await newBlog
       .save()
-      .then((savedBlog) =>
-        savedBlog.populate('media').populate('featuredImage'),
-      );
+      .then((blog) => blog.populate('media').populate('featuredImage'));
 
     const savedBlogWithUpdatedUrl = getBlogWithUrl(req, savedBlog, next);
 
