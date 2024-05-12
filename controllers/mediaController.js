@@ -2,6 +2,7 @@ const fs = require('fs');
 const sharpUtils = require('../utils/sharp');
 const Media = require('../models/mediaModel');
 const getMediaWithUrls = require('../utils/getMedia');
+const success = require('../middlewares/responseApi');
 
 async function uploadMedia(req, res, next) {
   try {
@@ -33,11 +34,11 @@ async function uploadMedia(req, res, next) {
       createdMedia.map(async (media) => getMediaWithUrls(req, media, next)),
     );
 
-    res.status(201).json({
-      message: 'Media uploaded successfully',
-      success: true,
-      data: mediaWithUrls,
-    });
+    res
+      .status(201)
+      .json(
+        success('Media Uploaded Successfully', mediaWithUrls, res.statusCode),
+      );
   } catch (error) {
     next(error);
   }
@@ -48,11 +49,9 @@ async function getAllMedia(req, res, next) {
     const media = await Media.find();
     const mediaWithUrls = getMediaWithUrls(req, media, next);
 
-    res.json({
-      success: true,
-      message: `All Media Found`,
-      data: mediaWithUrls,
-    });
+    res
+      .status(200)
+      .json(success('All Media Found', mediaWithUrls, res.statusCode));
   } catch (error) {
     next(error);
   }
@@ -69,11 +68,9 @@ async function getMediaById(req, res, next) {
     }
     const mediaWithUrls = getMediaWithUrls(req, media, next);
 
-    res.json({
-      success: true,
-      message: `Requested Media Found`,
-      data: mediaWithUrls,
-    });
+    res
+      .status(200)
+      .json(success('Requested Media Found', mediaWithUrls, res.statusCode));
   } catch (error) {
     next(error);
   }
@@ -95,11 +92,9 @@ async function editMedia(req, res, next) {
 
     const updatedMedia = await media.save();
 
-    res.status(200).json({
-      message: 'Media updated successfully',
-      success: 'true',
-      data: updatedMedia,
-    });
+    res
+      .status(200)
+      .json(success('Media Updated Successfully', updatedMedia, res.statusCode));
   } catch (error) {
     next(error);
   }
@@ -122,10 +117,10 @@ async function deleteMedia(req, res, next) {
       const imagePath = image.path;
       await fs.promises.unlink(imagePath);
     }
-    res.status(200).json({
-      message: 'Media deleted successfully',
-      success: 'true',
-    });
+    
+    res
+      .status(200)
+      .json(success('Media Deleted Succesfully', res.statusCode));
   } catch (error) {
     next(error);
   }

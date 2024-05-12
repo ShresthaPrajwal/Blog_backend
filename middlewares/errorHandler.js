@@ -3,7 +3,7 @@ const config = require('../config/config');
 const { logger } = require('../utils/logger');
 
 const errorHandler = (error, request, response, next) => {
-  logger.error(error.message);
+  logger.error(error.status, error.message);
   console.error(error.message);
   const errorId = uuidv4();
   const timestamp = new Date().toISOString();
