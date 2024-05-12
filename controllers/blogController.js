@@ -49,8 +49,8 @@ async function getBlogById(req, res, next) {
       .populate('featuredImage');
     if (!blog) {
       const error = new Error('Blog not found');
-      error.status(404);
-      next(error);
+      error.status=404;
+      throw error;
     }
     const blogWithUrl = getBlogWithUrl(req, blog, next);
 
@@ -78,8 +78,8 @@ async function updateBlog(req, res, next) {
 
     if (!updatedBlog) {
       const error = new Error('Blog not found');
-      error.status(404);
-      next(error);
+      error.status=404;
+      throw error;
     }
 
     const updatedblogWithUrl = getBlogWithUrl(req, updatedBlog, next);
@@ -99,8 +99,8 @@ async function deleteBlog(req, res, next) {
     const deletedBlog = await Blog.findByIdAndDelete(blogId);
     if (!deletedBlog) {
       const error = new Error('Blog not found');
-      error.status(404);
-      next(error);
+      error.status=404;
+      throw error;
     }
     res.status(200).json({
       success: true,

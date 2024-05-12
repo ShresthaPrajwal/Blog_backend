@@ -1,9 +1,11 @@
 const { v4: uuidv4 } = require('uuid');
 const config = require('../config/config');
-const { logger } = require('../utils/logger');
+const logger = require('../utils/logger');
 
 const errorHandler = (error, request, response, next) => {
-  logger.error(error.status, error.message);
+  logger.error(
+    `${error.status || 500} - ${error.message} - ${request.originalUrl} - ${request.method} - ${request.ip}`,
+  );
   console.error(error.message);
   const errorId = uuidv4();
   const timestamp = new Date().toISOString();
