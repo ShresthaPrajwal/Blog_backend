@@ -1,10 +1,8 @@
-const success = (message, results, statusCode) => {
-  return {
-    message,
-    success: true,
-    code: statusCode,
-    results,
-  };
-};
+const success = (message, results, statusCode) => ({
+  message,
+  success: true,
+  code: statusCode,
+  results,
+});
 
-module.exports = success
+module.exports = success;

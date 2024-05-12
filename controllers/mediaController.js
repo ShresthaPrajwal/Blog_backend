@@ -6,7 +6,6 @@ const success = require('../middlewares/responseApi');
 
 async function uploadMedia(req, res, next) {
   try {
-    console.log('From controller media', req.body);
     if (!req.files || req.files.length === 0) {
       const error = new Error('No files uploaded');
       error.status = 400;
@@ -94,7 +93,9 @@ async function editMedia(req, res, next) {
 
     res
       .status(200)
-      .json(success('Media Updated Successfully', updatedMedia, res.statusCode));
+      .json(
+        success('Media Updated Successfully', updatedMedia, res.statusCode),
+      );
   } catch (error) {
     next(error);
   }
@@ -117,10 +118,8 @@ async function deleteMedia(req, res, next) {
       const imagePath = image.path;
       await fs.promises.unlink(imagePath);
     }
-    
-    res
-      .status(200)
-      .json(success('Media Deleted Succesfully', res.statusCode));
+
+    res.status(200).json(success('Media Deleted Succesfully', res.statusCode));
   } catch (error) {
     next(error);
   }
