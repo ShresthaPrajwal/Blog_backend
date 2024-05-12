@@ -15,6 +15,10 @@ async function uploadBlog(req, res, next) {
       .populate('media')
       .populate('featuredImage');
 
+    // Blog.populate(savedBlog,[{path:'media'},{path:'featuredImage'}],(error,data)=>{
+    //   console.log(data)
+    // })
+
     const savedBlogWithUpdatedUrl = getBlogWithUrl(req, savedBlog, next);
 
     res.status(201).json({
@@ -23,7 +27,7 @@ async function uploadBlog(req, res, next) {
       data: savedBlogWithUpdatedUrl,
     });
   } catch (err) {
-    next(error);
+    next(err);
   }
 }
 

@@ -7,9 +7,9 @@ const authMiddleware = require('../middlewares/authMiddleware');
 
 router.post(
   '/',
+  authMiddleware,
   upload.array('image'),
   multerErrorHandler,
-  authMiddleware,
   mediaController.uploadMedia,
 );
 

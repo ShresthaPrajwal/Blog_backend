@@ -96,7 +96,7 @@ async function editMedia(req, res) {
     media.caption = caption || media.caption;
 
     const updatedMedia = await media.save();
-
+    //update with url
     res.status(200).json({
       message: 'Media updated successfully',
       success: 'true',
