@@ -6,10 +6,10 @@ blogRouter.post('/', authMiddleware, blogController.uploadBlog);
 
 blogRouter.get('/', blogController.getAllBlogs);
 
-blogRouter.get('/:id', blogController.getBlogById);
+blogRouter.get('/:slug', blogController.getBlogBySlug);
 
-blogRouter.put('/:id', authMiddleware, blogController.updateBlog);
+blogRouter.put('/:slug', authMiddleware, blogController.updateBlog);
 
-blogRouter.delete('/:id', authMiddleware, blogController.deleteBlog);
+blogRouter.delete('/:slug', authMiddleware, blogController.deleteBlog);
 
 module.exports = blogRouter;
