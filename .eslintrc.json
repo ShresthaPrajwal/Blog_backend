@@ -18,6 +18,7 @@
     "no-use-before-define": "off",
     "no-param-reassign": "off",
     "no-underscore-dangle": "off",
-    "no-return-await": "off"
+    "no-return-await": "off",
+    "no-unused-vars": "off"
   }
 }

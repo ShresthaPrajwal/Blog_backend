@@ -44,12 +44,17 @@ async function getAllBlogs(req, res, next) {
   }
 }
 
-async function getBlogById(req, res, next) {
+async function getBlogBySlug(req, res, next) {
   try {
-    const blogId = req.params.id;
-    const blog = await Blog.findById(blogId)
-      .populate('media')
-      .populate('featuredImage');
+    const slug = req.params.slug;
+    const blog = await Blog.findOne({ slug })
+
+    const populatedBlog = await Blog.populate(blog, {
+      path: 'media featuredImage',
+    });
+      
+    console.log(blog, populatedBlog);
+    
     if (!blog) {
       const error = new Error('Blog not found');
       error.status = 404;
@@ -68,21 +73,27 @@ async function getBlogById(req, res, next) {
 
 async function updateBlog(req, res, next) {
   try {
-    const blogId = req.params.id;
+    const blogSlug = req.params.slug;
     const { title, content, featuredImage, media } = req.body;
 
-    const updatedBlog = await Blog.findByIdAndUpdate(
-      blogId,
+    let updatedBlog = await Blog.findOneAndUpdate(
+      { slug: blogSlug },
       { title, content, featuredImage, media },
       { new: true },
-    )
-      .populate('media')
-      .populate('featuredImage');
+    );
+    updatedBlog = await Blog.populate(updatedBlog, {
+      path: 'media featuredImage',
+    });
 
+    console.log(updatedBlog);
     if (!updatedBlog) {
       const error = new Error('Blog not found');
       error.status = 404;
       throw error;
+    }
+    if (title && title !== updatedBlog.title) {
+      updatedBlog.slug = convertToSlug(title);
+      await updatedBlog.save();
     }
 
     const updatedblogWithUrl = getBlogWithUrl(req, updatedBlog, next);
@@ -118,7 +129,7 @@ async function deleteBlog(req, res, next) {
 module.exports = {
   uploadBlog,
   getAllBlogs,
-  getBlogById,
+  getBlogBySlug,
   updateBlog,
   deleteBlog,
 };
