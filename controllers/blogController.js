@@ -1,4 +1,3 @@
-const { v4: uuidv4 } = require('uuid');
 const Blog = require('../models/blogModel');
 const getBlogWithUrl = require('../utils/getBlogs');
 const convertToSlug = require('../utils/slugify');
@@ -46,15 +45,15 @@ async function getAllBlogs(req, res, next) {
 
 async function getBlogBySlug(req, res, next) {
   try {
-    const slug = req.params.slug;
-    const blog = await Blog.findOne({ slug })
+    const { slug } = req.params;
+    const blog = await Blog.findOne({ slug });
 
     const populatedBlog = await Blog.populate(blog, {
       path: 'media featuredImage',
     });
-      
+
     console.log(blog, populatedBlog);
-    
+
     if (!blog) {
       const error = new Error('Blog not found');
       error.status = 404;
