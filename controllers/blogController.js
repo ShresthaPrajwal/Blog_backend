@@ -1,5 +1,7 @@
+const { v4: uuidv4 } = require('uuid');
 const Blog = require('../models/blogModel');
 const getBlogWithUrl = require('../utils/getBlogs');
+const convertToSlug = require('../utils/slugify');
 
 async function uploadBlog(req, res, next) {
   try {
@@ -10,9 +12,11 @@ async function uploadBlog(req, res, next) {
     newBlog.featuredImage = req.body.featuredImage;
     newBlog.media = req.body.media;
 
-    const savedBlog = await newBlog
-      .save()
-      .then((blog) => blog.populate('media').populate('featuredImage'));
+    const slug = await convertToSlug(newBlog.title);
+    newBlog.slug = slug;
+
+    const savedBlog = await newBlog.save();
+    await Blog.populate(savedBlog, { path: 'media featuredImage' });
 
     const savedBlogWithUpdatedUrl = getBlogWithUrl(req, savedBlog, next);
 
