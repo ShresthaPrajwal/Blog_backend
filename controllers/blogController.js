@@ -40,7 +40,6 @@ async function getAllBlogs(req, res, next) {
       search = '',
     } = req.query;
 
-
     const query = { title: { $regex: search, $options: 'i' } };
 
     const totalBlogs = await Blog.countDocuments(query);
@@ -51,7 +50,6 @@ async function getAllBlogs(req, res, next) {
 
     const sortOptions = {};
     sortOptions[sort] = order === 'asc' ? 1 : -1;
-
 
     const blogs = await Blog.find(query)
       .sort(sortOptions)
@@ -121,15 +119,15 @@ async function updateBlog(req, res, next) {
     const blogSlug = req.params.slug;
     const { title, content, featuredImage, media } = req.body;
 
-    let updatedBlog = await Blog.findOneAndUpdate(
+    const updatedBlog = await Blog.findOneAndUpdate(
       { slug: blogSlug },
       { title, content, featuredImage, media },
       { new: true },
     );
-    let populatedBlog = await Blog.populate(updatedBlog, {
+    const populatedBlog = await Blog.populate(updatedBlog, {
       path: 'media featuredImage',
     });
-    console.log(populatedBlog)
+    console.log(populatedBlog);
     if (!updatedBlog) {
       const error = new Error('Blog not found');
       error.status = 404;
