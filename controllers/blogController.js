@@ -3,7 +3,6 @@ const getBlogWithUrl = require('../utils/getBlogs');
 const convertToSlug = require('../utils/slugify');
 
 async function uploadBlog(req, res, next) {
-  
   try {
     const newBlog = new Blog();
     console.log(req.body);
