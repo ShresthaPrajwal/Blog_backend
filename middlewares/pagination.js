@@ -1,7 +1,7 @@
 const defaultLimit = 2;
 
-const paginationMiddleware = (Model, base, populate) => {
-  return async (req, res, next) => {
+const paginationMiddleware =
+  (Model, base, populate) => async (req, res, next) => {
     try {
       const {
         page = 1,
@@ -55,6 +55,5 @@ const paginationMiddleware = (Model, base, populate) => {
       next(error);
     }
   };
-};
 
 module.exports = paginationMiddleware;

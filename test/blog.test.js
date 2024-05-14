@@ -1,13 +1,13 @@
 const chai = require('chai');
+const chaiHttp = require('chai-http');
 const app = require('../app');
 const Blog = require('../models/blogModel');
-const chaiHttp = require('chai-http');
-const expect = chai.expect;
+
+const { expect } = chai;
 
 chai.use(chaiHttp);
 
 describe('Blog Controller', () => {
-
   describe('GET /api/blogs', () => {
     it('should retrieve all blog posts', async () => {
       await Blog.create([
@@ -26,7 +26,7 @@ describe('Blog Controller', () => {
       ]);
 
       const res = await chai.request(app).get('/api/blogs');
-      console.log(res.body)
+      console.log(res.body);
       expect(res).to.have.status(200);
       expect(res.body).to.have.property('success').to.be.true;
       expect(res.body).to.have.property('data').to.be.an('array');

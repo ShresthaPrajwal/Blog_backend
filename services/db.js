@@ -1,16 +1,17 @@
 const mongoose = require('mongoose');
 const config = require('../config/config');
+
 const env = process.env.NODE_ENV;
-const { MONGO_URI , MONGODB_URI_TEST } = config;
+const { MONGO_URI, MONGODB_URI_TEST } = config;
 let workingURI;
 mongoose.set('strictQuery', false);
 
 if (env === 'test') {
-  workingURI = MONGODB_URI_TEST
+  workingURI = MONGODB_URI_TEST;
 } else {
-  workingURI = MONGO_URI
+  workingURI = MONGO_URI;
 }
-console.log(workingURI)
+console.log(workingURI);
 mongoose
   .connect(workingURI)
   .then(() => {
