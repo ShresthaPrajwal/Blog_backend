@@ -3,6 +3,7 @@ const getBlogWithUrl = require('../utils/getBlogs');
 const convertToSlug = require('../utils/slugify');
 
 async function uploadBlog(req, res, next) {
+  
   try {
     const newBlog = new Blog();
     console.log(req.body);
@@ -31,13 +32,9 @@ async function uploadBlog(req, res, next) {
 
 async function getAllBlogs(req, res, next) {
   try {
-    const blogs = await Blog.find().populate('media').populate('featuredImage');
-    const blogsWithUpdatedUrl = getBlogWithUrl(req, blogs, next);
-
-    res.status(200).json({
-      success: true,
-      data: blogsWithUpdatedUrl,
-    });
+    const data = await res.paginatedResults.data;
+    const blogsWithUpdatedUrl = getBlogWithUrl(req, data, next);
+    res.json({ ...res.paginatedResults, data: blogsWithUpdatedUrl });
   } catch (error) {
     next(error);
   }
@@ -75,16 +72,14 @@ async function updateBlog(req, res, next) {
     const blogSlug = req.params.slug;
     const { title, content, featuredImage, media } = req.body;
 
-    let updatedBlog = await Blog.findOneAndUpdate(
+    const updatedBlog = await Blog.findOneAndUpdate(
       { slug: blogSlug },
       { title, content, featuredImage, media },
       { new: true },
     );
-    updatedBlog = await Blog.populate(updatedBlog, {
+    const populatedBlog = await Blog.populate(updatedBlog, {
       path: 'media featuredImage',
     });
-
-    console.log(updatedBlog);
     if (!updatedBlog) {
       const error = new Error('Blog not found');
       error.status = 404;

@@ -9,6 +9,7 @@ const getBlogWithUrl = (req, blog, next) => {
         const blogWithUpdatedUrl = {
           ...item,
           media: getMediaWithUrls(req, item.media, next),
+          featuredImage: getMediaWithUrls(req, item.featuredImage, next),
         };
         return blogWithUpdatedUrl;
       });

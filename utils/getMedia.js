@@ -1,7 +1,7 @@
 const Media = require('../models/mediaModel');
 
 const getMediaWithUrls = (req, media, next) => {
-  const baseUrl = `http://${req.header('Host')}`;
+  const baseUrl = `${req.protocol}://${req.header('Host')}`;
   try {
     if (Array.isArray(media)) {
       const checkMediaInstance = media.every((ele) => ele instanceof Media);
