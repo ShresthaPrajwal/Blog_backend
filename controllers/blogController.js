@@ -2,8 +2,8 @@ const Blog = require('../models/blogModel');
 const getBlogWithUrl = require('../utils/getBlogs');
 const convertToSlug = require('../utils/slugify');
 
-const defaultLimit = 2;
 async function uploadBlog(req, res, next) {
+  
   try {
     const newBlog = new Blog();
     console.log(req.body);
@@ -32,56 +32,9 @@ async function uploadBlog(req, res, next) {
 
 async function getAllBlogs(req, res, next) {
   try {
-    const {
-      page = 1,
-      size = defaultLimit,
-      sort = 'title',
-      order = 'asc',
-      search = '',
-    } = req.query;
-
-    const query = { title: { $regex: search, $options: 'i' } };
-
-    const totalBlogs = await Blog.countDocuments(query);
-    const totalPages = Math.ceil(totalBlogs / size);
-
-    const currentPage = Math.max(1, Math.min(page, totalPages));
-    const currentSkip = (currentPage - 1) * size;
-
-    const sortOptions = {};
-    sortOptions[sort] = order === 'asc' ? 1 : -1;
-
-    const blogs = await Blog.find(query)
-      .sort(sortOptions)
-      .limit(size)
-      .skip(currentSkip)
-      .populate('media featuredImage');
-
-    const baseUrl = `${req.protocol}://${req.header('Host')}/api/blogs`;
-
-    const nextPageUrl =
-      currentPage < totalPages
-        ? `${baseUrl}?page=${currentPage + 1}&size=${size}&sort=${sort}&order=${order}&search=${search}`
-        : null;
-
-    const prevPageUrl =
-      currentPage > 1
-        ? `${baseUrl}?page=${currentPage - 1}&size=${size}&sort=${sort}&order=${order}&search=${search}`
-        : null;
-
-    const blogsWithUpdatedUrl = getBlogWithUrl(req, blogs, next);
-    res.status(200).json({
-      success: true,
-      data: blogsWithUpdatedUrl,
-      pagination: {
-        currentPage,
-        totalPages,
-        perPage: size,
-        totalItems: totalBlogs,
-        nextPageUrl,
-        prevPageUrl,
-      },
-    });
+    const data = await res.paginatedResults.data;
+    const blogsWithUpdatedUrl = getBlogWithUrl(req, data, next);
+    res.json({ ...res.paginatedResults, data: blogsWithUpdatedUrl });
   } catch (error) {
     next(error);
   }
@@ -127,7 +80,6 @@ async function updateBlog(req, res, next) {
     const populatedBlog = await Blog.populate(updatedBlog, {
       path: 'media featuredImage',
     });
-    console.log(populatedBlog);
     if (!updatedBlog) {
       const error = new Error('Blog not found');
       error.status = 404;
