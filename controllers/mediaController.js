@@ -15,7 +15,6 @@ async function uploadMedia(req, res, next) {
       async (file) =>
         await sharpUtils.resizeAndSaveImage(file.path, req.generatedUUID),
     );
-
     const resizedImages = await Promise.all(resizedImagesPromises);
 
     const mediaObjects = req.files.map((file, index) => ({
@@ -103,7 +102,7 @@ async function editMedia(req, res, next) {
 async function deleteMedia(req, res, next) {
   try {
     const mediaId = req.params.id;
-
+    console.log('deleteMedia');
     const media = await Media.findByIdAndDelete(mediaId);
 
     if (!media) {
@@ -111,14 +110,16 @@ async function deleteMedia(req, res, next) {
     }
     const { featuredImage, paths } = media;
     const featuredImagePath = featuredImage;
-    await fs.chmod(featuredImagePath, 0o777);
-
-    await fs.promises.unlink(featuredImagePath);
+    await fs.chmod(featuredImagePath, 0o777, async () => {
+      await fs.promises.unlink(featuredImagePath);
+    });
+    console.log('featerued imagepath', featuredImagePath, paths);
 
     for (const image of paths) {
       const imagePath = image.path;
-      await fs.chmod(imagePath, 0o777);
-      await fs.promises.unlink(imagePath);
+      await fs.chmod(imagePath, 0o777, async () => {
+        await fs.promises.unlink(imagePath);
+      });
     }
 
     res.status(200).json(success('Media Deleted Succesfully', res.statusCode));

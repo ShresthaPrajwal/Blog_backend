@@ -20,7 +20,6 @@ describe('Login API', () => {
 
   before(async function () {
     await User.deleteMany({});
-    await Media.deleteMany({});
     await User.create({
       username: 'testuser',
       passwordHash: await bcrypt.hash('password123', 10),
@@ -123,7 +122,7 @@ describe('Login API', () => {
           featuredImage: uploadedMediaId,
           media: [uploadedMediaId],
         };
-
+        console.log('from blg test', uploadedMediaId, blogData);
         const res = await chai
           .request(app)
           .post('/api/blogs')
@@ -137,6 +136,7 @@ describe('Login API', () => {
         );
         expect(res.body.data).to.have.property('title', blogData.title);
         expect(res.body.data).to.have.property('featuredImage');
+        console.log('from blog test post', res.body);
       });
 
       it('get all blogs succesfully', async () => {

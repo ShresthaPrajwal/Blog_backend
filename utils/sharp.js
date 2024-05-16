@@ -5,7 +5,7 @@ const config = require('../config/config');
 const resizeAndSaveImage = async (imagePath, uuid) => {
   try {
     const originalImage = sharp(imagePath);
-
+    console.log('from resize and save', imagePath);
     const metadata = await originalImage.metadata();
     const resolutions = [
       {
@@ -47,7 +47,10 @@ const resizeAndSaveImage = async (imagePath, uuid) => {
         }
       })();
 
-      const folderPath = path.join(config.UPLOADS_DIR, folderName);
+      const folderPath = path.join(
+        process.env.NODE_ENV === 'test' ? 'test_uploads/' : config.UPLOADS_DIR,
+        folderName,
+      );
       await createFolderIfNotExists(folderPath);
 
       const resizedFilename = `${
