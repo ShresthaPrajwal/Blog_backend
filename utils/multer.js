@@ -10,6 +10,7 @@ const storage = multer.diskStorage({
     if (!fs.existsSync('uploads')) {
       fs.mkdirSync('uploads');
     }
+    // Pass an empty error object and the destination path to the callback
     cb(null, 'uploads/');
   },
   filename(req, file, cb) {
@@ -17,6 +18,7 @@ const storage = multer.diskStorage({
     const uuid = uuidv4();
     req.generatedUUID = uuid;
     const filenameWithUUID = `${uuid}-${sanitizedFilename}`;
+    // Pass an empty error object and the filename to the callback
     cb(null, filenameWithUUID);
   },
 });
@@ -29,6 +31,7 @@ const upload = multer({
     if (!allowedExtensions.includes(ext)) {
       return cb(new Error('Only images allowed!'));
     }
+    // Pass an empty error object and true to the callback
     cb(null, true);
   },
 });
