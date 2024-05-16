@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
     if (!fs.existsSync(folderName)) {
       fs.mkdirSync(folderName);
     }
-    cb(null, `${folderName  }/`);
+    cb(null, `${folderName}/`);
   },
   filename(req, file, cb) {
     const sanitizedFilename = file.originalname.replace(/[^a-z0-9.-]/gi, '-');
