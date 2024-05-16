@@ -11,7 +11,6 @@ async function uploadMedia(req, res, next) {
       error.status = 400;
       next(error);
     }
-    console.log('from uploadMedia ', req.generatedUUID);
     const resizedImagesPromises = req.files.map(
       async (file) =>
         await sharpUtils.resizeAndSaveImage(file.path, req.generatedUUID),
@@ -60,7 +59,6 @@ async function getAllMedia(req, res, next) {
 async function getMediaById(req, res, next) {
   try {
     const media = await Media.findById(req.params.id);
-    console.log('fromgetmediabyid', media);
     if (!media) {
       const error = new Error('Media Not Found');
       error.status = 404;

@@ -48,7 +48,6 @@ async function getBlogBySlug(req, res, next) {
       path: 'media featuredImage',
     });
 
-    console.log(blog, populatedBlog);
 
     if (!blog) {
       const error = new Error('Blog not found');

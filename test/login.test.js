@@ -21,7 +21,6 @@ describe('Login API', () => {
   before(async function () {
     await User.deleteMany({});
     await Media.deleteMany({});
-    console.log('start');
     await User.create({
       username: 'testuser',
       passwordHash: await bcrypt.hash('password123', 10),
@@ -70,15 +69,11 @@ describe('Login API', () => {
         'message',
         'Media Uploaded Successfully',
       );
-      console.log(res.body);
       uploadedMediaId = res.body.results[0]._id;
-      console.log('uploaded media id from upload', uploadedMediaId);
     });
 
     it('should get media by ID successfully', async () => {
-      console.log('uploadedMediaID here', uploadedMediaId);
       const res = await chai.request(app).get(`/api/media/${uploadedMediaId}`);
-      console.log(res.body);
       expect(res).to.have.status(200);
       expect(res.body).to.be.a('object');
     });
@@ -144,7 +139,13 @@ describe('Login API', () => {
         expect(res.body.data).to.have.property('featuredImage');
       });
 
-      it('get all blogs succesfully', async () => {});
+      it('get all blogs succesfully', async () => {
+        const res = await chai.request(app).get('/api/blogs');
+
+        expect(res).to.have.status(200);
+        expect(res.body).to.have.property('pagination');
+        expect(res.body.data).to.be.an('array');
+      });
 
       it('should get a blog by slug successfully', async () => {
         const blogData = {
@@ -160,7 +161,6 @@ describe('Login API', () => {
           .set('Authorization', `Bearer ${token}`)
           .send(blogData);
         const createdBlog = blogCreationRes.body.data;
-        console.log('created Blog', createdBlog);
         const res = await chai
           .request(app)
           .get(`/api/blogs/${createdBlog.slug}`);
