@@ -6,3 +6,5 @@ log
 logs
 run
 .env.test
+
+test_uploads

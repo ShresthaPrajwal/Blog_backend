@@ -7,10 +7,12 @@ const allowedExtensions = ['.jpg', '.jpeg', '.png'];
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    if (!fs.existsSync('uploads')) {
-      fs.mkdirSync('uploads');
+    const folderName =
+      process.env.NODE_ENV === 'test' ? 'test_uploads' : 'uploads';
+    if (!fs.existsSync(folderName)) {
+      fs.mkdirSync(folderName);
     }
-    cb(null, 'uploads/');
+    cb(null, `${folderName}/`);
   },
   filename(req, file, cb) {
     const sanitizedFilename = file.originalname.replace(/[^a-z0-9.-]/gi, '-');

@@ -13,10 +13,12 @@ async function uploadBlog(req, res, next) {
 
     const slug = await convertToSlug(newBlog.title);
     newBlog.slug = slug;
-
+    console.log('newBlog', newBlog);
     const savedBlog = await newBlog.save();
-    await Blog.populate(savedBlog, { path: 'media featuredImage' });
+    console.log('savedBlog1', savedBlog);
 
+    await Blog.populate(savedBlog, { path: 'media featuredImage' });
+    console.log('savedBlog2', savedBlog);
     const savedBlogWithUpdatedUrl = getBlogWithUrl(req, savedBlog, next);
 
     res.status(201).json({
@@ -32,6 +34,8 @@ async function uploadBlog(req, res, next) {
 async function getAllBlogs(req, res, next) {
   try {
     const data = await res.paginatedResults.data;
+    console.log('from getall', data);
+
     const blogsWithUpdatedUrl = getBlogWithUrl(req, data, next);
     res.json({ ...res.paginatedResults, data: blogsWithUpdatedUrl });
   } catch (error) {
@@ -47,8 +51,6 @@ async function getBlogBySlug(req, res, next) {
     const populatedBlog = await Blog.populate(blog, {
       path: 'media featuredImage',
     });
-
-    console.log(blog, populatedBlog);
 
     if (!blog) {
       const error = new Error('Blog not found');
