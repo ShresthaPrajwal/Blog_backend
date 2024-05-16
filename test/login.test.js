@@ -27,7 +27,6 @@ describe('Login API', () => {
       passwordHash: await bcrypt.hash('password123', 10),
       name: 'Test User',
     });
-    
   });
 
   it('should return a JWT token upon successful login', async () => {
@@ -122,7 +121,6 @@ describe('Login API', () => {
     // });
 
     describe('Blog API', () => {
-
       it('should upload a blog successfully', async () => {
         const blogData = {
           title: 'Test Blog Title',
@@ -146,9 +144,7 @@ describe('Login API', () => {
         expect(res.body.data).to.have.property('featuredImage');
       });
 
-      it('get all blogs succesfully',async()=>{
-        
-      })
+      it('get all blogs succesfully', async () => {});
 
       it('should get a blog by slug successfully', async () => {
         const blogData = {
@@ -164,17 +160,15 @@ describe('Login API', () => {
           .set('Authorization', `Bearer ${token}`)
           .send(blogData);
         const createdBlog = blogCreationRes.body.data;
-        console.log("created Blog",createdBlog)
+        console.log('created Blog', createdBlog);
         const res = await chai
           .request(app)
           .get(`/api/blogs/${createdBlog.slug}`);
 
         expect(res).to.have.status(200);
         expect(res.body.data).to.have.property('title', blogData.title);
-        expect(res.body.data).to.have.property(
-          'featuredImage'
-        );
-        expect(res.body.data.media).to.be.an('array'); 
+        expect(res.body.data).to.have.property('featuredImage');
+        expect(res.body.data.media).to.be.an('array');
       });
     });
   });
