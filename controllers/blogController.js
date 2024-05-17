@@ -100,7 +100,7 @@ async function updateBlog(req, res, next) {
 async function deleteBlog(req, res, next) {
   try {
     const blogSlug = req.params.slug;
-    const deletedBlog = await Blog.findOneAndDelete({slug:blogSlug});
+    const deletedBlog = await Blog.findOneAndDelete({ slug: blogSlug });
     if (!deletedBlog) {
       const error = new Error('Blog not found');
       error.status = 404;
