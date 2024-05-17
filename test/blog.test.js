@@ -9,7 +9,7 @@ chai.use(chaiHttp);
 const bcrypt = require('bcrypt');
 const path = require('path');
 
-describe('Blog API', () => {
+describe('BLOG API', () => {
   let token;
   let uploadedMediaId;
   let uploadedBlogSlug;

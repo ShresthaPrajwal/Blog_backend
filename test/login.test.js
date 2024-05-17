@@ -9,7 +9,7 @@ const Media = require('../models/mediaModel');
 const Blog = require('../models/blogModel');
 chai.use(chaiHttp);
 
-describe('Login API', () => {
+describe('LOGIN API', () => {
   let token;
   after(async () => {
     await User.deleteMany({});

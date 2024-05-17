@@ -8,7 +8,7 @@ chai.use(chaiHttp);
 const bcrypt = require('bcrypt');
 const path = require('path');
 
-describe('Media API', () => {
+describe('MEDIA API', () => {
   let token;
   let uploadedMediaId;
   before(async function () {
@@ -52,6 +52,23 @@ describe('Media API', () => {
     expect(res.body).to.be.a('object');
   });
 
+  it('should return 400 for invalid media ID', async () => {
+    const invalidMediaId = 'invalid-media-id';
+
+    const res = await chai.request(app).get(`/api/media/${invalidMediaId}`);
+
+    expect(res).to.have.status(400);
+  });
+  it('should return 400 for non-existent media ID', async () => {
+    const nonExistentMediaId = 'nonexistentmediaid123456';
+
+    const res = await chai
+      .request(app)
+      .delete(`/api/media/${nonExistentMediaId}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res).to.have.status(400);
+  });
   it('should get all media successfully', async () => {
     const res = await chai.request(app).get('/api/media');
 
@@ -75,7 +92,18 @@ describe('Media API', () => {
     expect(res.body.results.caption).to.equal(newCaption);
     expect(res.body.results.alternateText).to.equal(newAlternateText);
   });
+  it('should return 498 when attempting to edit media without authentication', async () => {
+    const newCaption = 'This is an edited caption';
+    const newAlternateText = 'Edited alternate text';
 
+    const res = await chai
+      .request(app)
+      .put(`/api/media/${uploadedMediaId}`)
+      .send({ caption: newCaption, alternateText: newAlternateText });
+
+    expect(res).to.have.status(498);
+    expect(res.body).to.have.property('error', 'Invalid Token');
+  });
   it('should delete media successfully', async () => {
     const res = await chai
       .request(app)
