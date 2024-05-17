@@ -32,7 +32,6 @@ describe('Blog API', () => {
       .post('/api/media')
       .set('Authorization', `Bearer ${token}`)
       .attach('image', filePath);
-    console.log(res2.body);
     uploadedMediaId = res2.body.results[0]._id;
   });
   after(async function () {
@@ -48,7 +47,6 @@ describe('Blog API', () => {
       featuredImage: uploadedMediaId,
       media: [uploadedMediaId],
     };
-    console.log('from blg test', uploadedMediaId, blogData);
     const res = await chai
       .request(app)
       .post('/api/blogs')
@@ -59,7 +57,6 @@ describe('Blog API', () => {
     expect(res.body).to.have.property('message', 'Blog uploaded successfully!');
     expect(res.body.data).to.have.property('title', blogData.title);
     expect(res.body.data).to.have.property('featuredImage');
-    console.log('from blog test post', res.body);
   });
 
   it('get all blogs succesfully', async () => {

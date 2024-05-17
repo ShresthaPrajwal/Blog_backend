@@ -8,7 +8,6 @@ const getUser = async (request, response) => {
 
 const addUser = async (request, response, next) => {
   try {
-    console.log(request.body);
     const { username, name, password } = request.body;
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(password, saltRounds);
@@ -25,12 +24,10 @@ const addUser = async (request, response, next) => {
       name,
       passwordHash,
     });
-    console.log('im here');
     const savedUser = await user.save();
 
     response.status(201).json(savedUser);
   } catch (error) {
-    console.log('Error from users', error);
     next(error);
   }
 };

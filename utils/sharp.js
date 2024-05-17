@@ -5,7 +5,6 @@ const config = require('../config/config');
 const resizeAndSaveImage = async (imagePath, uuid) => {
   try {
     const originalImage = sharp(imagePath);
-    console.log('from resize and save', imagePath);
     const metadata = await originalImage.metadata();
     const resolutions = [
       {
