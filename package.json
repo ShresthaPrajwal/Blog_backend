@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon index.js",
-    "test": "cross-env NODE_ENV=test mocha --timeout 10000",
+    "test": "cross-env NODE_ENV=test mocha --timeout 10000 register.test.js login.test.js media.test.js blog.test.js",
     "check-format": "prettier --check .",
     "check-lint": "eslint . --ext js",
     "format": "prettier --write .",
