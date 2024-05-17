@@ -49,5 +49,4 @@ describe('Login API', () => {
     expect(res).to.have.status(401);
     expect(res.body).to.have.property('error', 'invalid username or password');
   });
-
 });

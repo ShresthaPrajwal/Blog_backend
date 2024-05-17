@@ -6,7 +6,7 @@ const Media = require('../models/mediaModel');
 const User = require('../models/usersModel');
 chai.use(chaiHttp);
 const bcrypt = require('bcrypt');
-const path = require('path')
+const path = require('path');
 
 describe('Media API', () => {
   let token;

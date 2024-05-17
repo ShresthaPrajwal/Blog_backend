@@ -26,21 +26,21 @@ describe('REGISTER API', () => {
     expect(res).to.have.property('name', 'Test User');
   });
 
-//   it('should return an error for duplicate username', async () => {
-//     console.log('from dup username');
-//     let res;
-//     try {
-//       res = await User.create({
-//         username: 'testuser',
-//         passwordHash: await bcrypt.hash('password123', 10),
-//         name: 'Test User',
-//       });
-//     } catch (error) {
-//       res.status(500).send({ success: false });
-//     }
-//     console.log('from dup username', res);
+  //   it('should return an error for duplicate username', async () => {
+  //     console.log('from dup username');
+  //     let res;
+  //     try {
+  //       res = await User.create({
+  //         username: 'testuser',
+  //         passwordHash: await bcrypt.hash('password123', 10),
+  //         name: 'Test User',
+  //       });
+  //     } catch (error) {
+  //       res.status(500).send({ success: false });
+  //     }
+  //     console.log('from dup username', res);
 
-//     expect(res).to.have.status(500);
-//     expect(res.body).to.have.property('success', 'false');
-//   });
+  //     expect(res).to.have.status(500);
+  //     expect(res.body).to.have.property('success', 'false');
+  //   });
 });

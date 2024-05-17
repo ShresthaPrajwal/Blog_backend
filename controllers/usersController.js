@@ -25,12 +25,12 @@ const addUser = async (request, response, next) => {
       name,
       passwordHash,
     });
-    console.log('im here')
+    console.log('im here');
     const savedUser = await user.save();
 
     response.status(201).json(savedUser);
   } catch (error) {
-    console.log('Error from users',error)
+    console.log('Error from users', error);
     next(error);
   }
 };

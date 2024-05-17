@@ -32,7 +32,7 @@ describe('Blog API', () => {
       .post('/api/media')
       .set('Authorization', `Bearer ${token}`)
       .attach('image', filePath);
-    console.log(res2.body)
+    console.log(res2.body);
     uploadedMediaId = res2.body.results[0]._id;
   });
   after(async function () {
