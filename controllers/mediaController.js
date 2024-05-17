@@ -102,7 +102,6 @@ async function editMedia(req, res, next) {
 async function deleteMedia(req, res, next) {
   try {
     const mediaId = req.params.id;
-    console.log('deleteMedia');
     const media = await Media.findByIdAndDelete(mediaId);
 
     if (!media) {
@@ -113,7 +112,6 @@ async function deleteMedia(req, res, next) {
     await fs.chmod(featuredImagePath, 0o777, async () => {
       await fs.promises.unlink(featuredImagePath);
     });
-    console.log('featerued imagepath', featuredImagePath, paths);
 
     for (const image of paths) {
       const imagePath = image.path;

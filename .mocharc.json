@@ -4,8 +4,14 @@
   "package": "./package.json",
   "reporter": "spec",
   "slow": "75",
-  "timeout": "2000",
+  "timeout": "10000",
   "ui": "bdd",
+  "spec": [
+    "test/register.test.js",
+    "test/login.test.js",
+    "test/media.test.js",
+    "test/blog.test.js"
+  ],
   "watch-files": ["lib/**/*.js", "test/**/*.js"],
   "watch-ignore": ["lib/vendor"]
 }

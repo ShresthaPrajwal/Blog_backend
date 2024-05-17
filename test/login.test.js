@@ -2,7 +2,6 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const { expect } = chai;
 const bcrypt = require('bcrypt');
-const path = require('path');
 
 const app = require('../app');
 const User = require('../models/usersModel');
@@ -10,7 +9,7 @@ const Media = require('../models/mediaModel');
 const Blog = require('../models/blogModel');
 chai.use(chaiHttp);
 
-describe('Login API', () => {
+describe('LOGIN API', () => {
   let token;
   after(async () => {
     await User.deleteMany({});
@@ -51,125 +50,23 @@ describe('Login API', () => {
     expect(res.body).to.have.property('error', 'invalid username or password');
   });
 
-  describe('Media API', () => {
-    let uploadedMediaId;
-
-    it('should upload media successfully', async () => {
-      const filePath = path.join('./public', 'sign.jpg');
-
-      const res = await chai
-        .request(app)
-        .post('/api/media')
-        .set('Authorization', `Bearer ${token}`)
-        .attach('image', filePath);
-
-      expect(res).to.have.status(201);
-      expect(res.body).to.have.property(
-        'message',
-        'Media Uploaded Successfully',
-      );
-      uploadedMediaId = res.body.results[0]._id;
+  it('should return an error for empty password field', async () => {
+    const res = await chai.request(app).post('/api/login').send({
+      username: 'testuser',
+      password: '',
     });
 
-    it('should get media by ID successfully', async () => {
-      const res = await chai.request(app).get(`/api/media/${uploadedMediaId}`);
-      expect(res).to.have.status(200);
-      expect(res.body).to.be.a('object');
+    expect(res).to.have.status(401);
+    expect(res.body).to.have.property('error', 'invalid username or password');
+  });
+
+  it('should return an error for invalid username', async () => {
+    const res = await chai.request(app).post('/api/login').send({
+      username: 'nonexistentuser',
+      password: 'password123',
     });
 
-    it('should get all media successfully', async () => {
-      const res = await chai.request(app).get('/api/media');
-
-      expect(res).to.have.status(200);
-      expect(res.body).to.have.property('message', 'All Media Found');
-      expect(res.body.results).to.be.an('array');
-    });
-
-    it('should edit media successfully', async () => {
-      const newCaption = 'This is an edited caption';
-      const newAlternateText = 'Edited alternate text';
-
-      const res = await chai
-        .request(app)
-        .put(`/api/media/${uploadedMediaId}`)
-        .set('Authorization', `Bearer ${token}`)
-        .send({ caption: newCaption, alternateText: newAlternateText });
-
-      expect(res).to.have.status(200);
-      expect(res.body).to.have.property(
-        'message',
-        'Media Updated Successfully',
-      );
-      expect(res.body.results.caption).to.equal(newCaption);
-      expect(res.body.results.alternateText).to.equal(newAlternateText);
-    });
-
-    // it('should delete media successfully', async () => {
-    //   const res = await chai
-    //     .request(app)
-    //     .delete(`/api/media/${uploadedMediaId}`)
-    //     .set('Authorization', `Bearer ${token}`);
-
-    //   expect(res).to.have.status(200);
-    //   expect(res.body).to.have.property('message', 'Media Deleted Succesfully');
-    // });
-
-    describe('Blog API', () => {
-      it('should upload a blog successfully', async () => {
-        const blogData = {
-          title: 'Test Blog Title',
-          content: 'This is some blog content',
-          featuredImage: uploadedMediaId,
-          media: [uploadedMediaId],
-        };
-        console.log('from blg test', uploadedMediaId, blogData);
-        const res = await chai
-          .request(app)
-          .post('/api/blogs')
-          .set('Authorization', `Bearer ${token}`)
-          .send(blogData);
-
-        expect(res).to.have.status(201);
-        expect(res.body).to.have.property(
-          'message',
-          'Blog uploaded successfully!',
-        );
-        expect(res.body.data).to.have.property('title', blogData.title);
-        expect(res.body.data).to.have.property('featuredImage');
-        console.log('from blog test post', res.body);
-      });
-
-      it('get all blogs succesfully', async () => {
-        const res = await chai.request(app).get('/api/blogs');
-
-        expect(res).to.have.status(200);
-        expect(res.body).to.have.property('pagination');
-        expect(res.body.data).to.be.an('array');
-      });
-
-      it('should get a blog by slug successfully', async () => {
-        const blogData = {
-          title: 'Test Blog Title',
-          content: 'This is some blog content',
-          featuredImage: uploadedMediaId,
-          media: [uploadedMediaId],
-        };
-
-        const blogCreationRes = await chai
-          .request(app)
-          .post('/api/blogs')
-          .set('Authorization', `Bearer ${token}`)
-          .send(blogData);
-        const createdBlog = blogCreationRes.body.data;
-        const res = await chai
-          .request(app)
-          .get(`/api/blogs/${createdBlog.slug}`);
-
-        expect(res).to.have.status(200);
-        expect(res.body.data).to.have.property('title', blogData.title);
-        expect(res.body.data).to.have.property('featuredImage');
-        expect(res.body.data.media).to.be.an('array');
-      });
-    });
+    expect(res).to.have.status(401);
+    expect(res.body).to.have.property('error', 'invalid username or password');
   });
 });

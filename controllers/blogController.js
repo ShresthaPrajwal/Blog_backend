@@ -5,7 +5,6 @@ const convertToSlug = require('../utils/slugify');
 async function uploadBlog(req, res, next) {
   try {
     const newBlog = new Blog();
-    console.log(req.body);
     newBlog.title = req.body.title || 'Title';
     newBlog.content = req.body.content || 'Content';
     newBlog.featuredImage = req.body.featuredImage;
@@ -13,12 +12,9 @@ async function uploadBlog(req, res, next) {
 
     const slug = await convertToSlug(newBlog.title);
     newBlog.slug = slug;
-    console.log('newBlog', newBlog);
     const savedBlog = await newBlog.save();
-    console.log('savedBlog1', savedBlog);
 
     await Blog.populate(savedBlog, { path: 'media featuredImage' });
-    console.log('savedBlog2', savedBlog);
     const savedBlogWithUpdatedUrl = getBlogWithUrl(req, savedBlog, next);
 
     res.status(201).json({
@@ -34,7 +30,6 @@ async function uploadBlog(req, res, next) {
 async function getAllBlogs(req, res, next) {
   try {
     const data = await res.paginatedResults.data;
-    console.log('from getall', data);
 
     const blogsWithUpdatedUrl = getBlogWithUrl(req, data, next);
     res.json({ ...res.paginatedResults, data: blogsWithUpdatedUrl });
@@ -104,8 +99,8 @@ async function updateBlog(req, res, next) {
 }
 async function deleteBlog(req, res, next) {
   try {
-    const blogId = req.params.id;
-    const deletedBlog = await Blog.findByIdAndDelete(blogId);
+    const blogSlug = req.params.slug;
+    const deletedBlog = await Blog.findOneAndDelete({ slug: blogSlug });
     if (!deletedBlog) {
       const error = new Error('Blog not found');
       error.status = 404;

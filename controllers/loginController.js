@@ -5,7 +5,6 @@ const User = require('../models/usersModel');
 
 async function loginController(request, response, next) {
   try {
-    console.log(request.body);
     const { username, password } = request.body;
 
     const user = await User.findOne({ username });
