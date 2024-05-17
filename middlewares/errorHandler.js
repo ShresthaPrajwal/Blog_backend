@@ -15,7 +15,7 @@ const errorHandler = (error, request, response, next) => {
   // );
   const errorId = uuidv4();
   const timestamp = new Date().toISOString();
-  if(!error.status){
+  if (!error.status) {
     let code;
     switch (error.name) {
       case 'CastError':
