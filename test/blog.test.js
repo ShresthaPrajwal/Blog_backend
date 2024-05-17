@@ -12,6 +12,7 @@ const path = require('path');
 describe('Blog API', () => {
   let token;
   let uploadedMediaId;
+  let uploadedBlogSlug;
   before(async function () {
     await User.deleteMany({});
     await User.create({
@@ -57,6 +58,8 @@ describe('Blog API', () => {
     expect(res.body).to.have.property('message', 'Blog uploaded successfully!');
     expect(res.body.data).to.have.property('title', blogData.title);
     expect(res.body.data).to.have.property('featuredImage');
+
+    uploadedBlogSlug = res.body.data.slug
   });
 
   it('get all blogs succesfully', async () => {
@@ -68,24 +71,88 @@ describe('Blog API', () => {
   });
 
   it('should get a blog by slug successfully', async () => {
-    const blogData = {
-      title: 'Test Blog Title',
-      content: 'This is some blog content',
-      featuredImage: uploadedMediaId,
-      media: [uploadedMediaId],
-    };
-
-    const blogCreationRes = await chai
-      .request(app)
-      .post('/api/blogs')
-      .set('Authorization', `Bearer ${token}`)
-      .send(blogData);
-    const createdBlog = blogCreationRes.body.data;
-    const res = await chai.request(app).get(`/api/blogs/${createdBlog.slug}`);
+    const res = await chai.request(app).get(`/api/blogs/${uploadedBlogSlug}`);
 
     expect(res).to.have.status(200);
-    expect(res.body.data).to.have.property('title', blogData.title);
+    expect(res.body.data).to.have.property('title');
     expect(res.body.data).to.have.property('featuredImage');
     expect(res.body.data.media).to.be.an('array');
+    uploadedBlogSlug = res.body.data.slug
   });
+
+  it('should update a blog successfully', async () => {
+    
+    const updatedTitle = 'Updated Test Blog Title';
+    const updatedContent = 'Updated blog content';
+    const updatedRes = await chai
+      .request(app)
+      .put(`/api/blogs/${uploadedBlogSlug}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ title: updatedTitle, content: updatedContent });
+
+    expect(updatedRes).to.have.status(200);
+    expect(updatedRes.body).to.have.property('success', true);
+    expect(updatedRes.body).to.have.property(
+      'message',
+      'Blog updated successfully',
+    );
+    expect(updatedRes.body.data).to.have.property('title', updatedTitle);
+    expect(updatedRes.body.data).to.have.property('content', updatedContent);
+  });
+
+it('should return 498 when trying to update a blog without authentication', async () => {
+  const updatedTitle = 'Updated Test Blog Title';
+  const updatedContent = 'Updated blog content';
+  const res = await chai
+    .request(app)
+    .put(`/api/blogs/${uploadedBlogSlug}`)
+    .send({ title: updatedTitle, content: updatedContent });
+
+  expect(res).to.have.status(498);
+});
+
+it('should delete a blog successfully', async () => {
+  const blogData = {
+    title: 'Test Blog Title',
+    content: 'This is some blog content',
+    featuredImage: uploadedMediaId,
+    media: [uploadedMediaId],
+  };
+
+  const createRes = await chai
+    .request(app)
+    .post('/api/blogs')
+    .set('Authorization', `Bearer ${token}`)
+    .send(blogData);
+  const deleteRes = await chai
+    .request(app)
+    .delete(`/api/blogs/${createRes.body.data.slug}`)
+    .set('Authorization', `Bearer ${token}`);
+  expect(deleteRes).to.have.status(200);
+  expect(deleteRes.body).to.have.property('success', true);
+  expect(deleteRes.body).to.have.property(
+    'message',
+    'Blog deleted successfully',
+  );
+  expect(deleteRes.body.data).to.have.property('title', blogData.title);
+
+  const deletedBlog = await Blog.findOne({ slug: createRes.body.data.slug });
+  expect(deletedBlog).to.be.null;
+});
+
+it('should return 498 when trying to delete a blog without authentication', async () => {
+  const res = await chai.request(app).delete(`/api/blogs/${uploadedBlogSlug}`);
+
+  expect(res).to.have.status(498);
+});
+
+it('should return 404 when trying to delete a non-existent blog', async () => {
+  const res = await chai
+    .request(app)
+    .delete('/api/blogs/non-existent-slug')
+    .set('Authorization', `Bearer ${token}`);
+
+  expect(res).to.have.status(404);
+});
+
 });
