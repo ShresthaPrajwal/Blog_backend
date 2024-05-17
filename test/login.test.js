@@ -49,4 +49,26 @@ describe('Login API', () => {
     expect(res).to.have.status(401);
     expect(res.body).to.have.property('error', 'invalid username or password');
   });
+
+  it('should return an error for empty password field', async () => {
+    const res = await chai.request(app).post('/api/login').send({
+      username: 'testuser',
+      password: '',
+    });
+
+    expect(res).to.have.status(401);
+    expect(res.body).to.have.property('error', 'invalid username or password');
+  });
+
+
+
+  it('should return an error for invalid username', async () => {
+    const res = await chai.request(app).post('/api/login').send({
+      username: 'nonexistentuser',
+      password: 'password123',
+    });
+
+    expect(res).to.have.status(401);
+    expect(res.body).to.have.property('error', 'invalid username or password');
+  });
 });
