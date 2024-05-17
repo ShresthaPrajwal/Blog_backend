@@ -60,8 +60,6 @@ describe('Login API', () => {
     expect(res.body).to.have.property('error', 'invalid username or password');
   });
 
-
-
   it('should return an error for invalid username', async () => {
     const res = await chai.request(app).post('/api/login').send({
       username: 'nonexistentuser',
