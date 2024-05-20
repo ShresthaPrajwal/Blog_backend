@@ -16,7 +16,7 @@ const addUser = async (request, response, next) => {
       return response.status(400).json({ error: 'Name cannot be empty' });
 
     if (username.length < 4) {
-      let message =
+      const message =
         username.length === 0
           ? 'Username cannot be empty'
           : 'Username length less than 4';
@@ -24,7 +24,7 @@ const addUser = async (request, response, next) => {
       return response.status(400).json({ error: message });
     }
     if (password.length < 4) {
-      let message =
+      const message =
         password.length === 0
           ? 'Password cannot be empty'
           : 'Password length less than 4';
@@ -77,7 +77,6 @@ const deleteUser = async (request, response, next) => {
   try {
     const { username } = request.params;
     const deletedUser = await User.findOneAndDelete({ username });
-    console.log(deletedUser)
     if (!deletedUser) {
       return response.status(404).json({ error: 'User not found' });
     }
@@ -92,5 +91,5 @@ module.exports = {
   addUser,
   getUser,
   updateUser,
-  deleteUser
+  deleteUser,
 };

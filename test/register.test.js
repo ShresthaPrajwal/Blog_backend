@@ -185,13 +185,10 @@ describe('REGISTER API', () => {
       });
 
       it('should return 498 when trying to edit a user without token', async () => {
-        const res = await chai
-          .request(app)
-          .put('/api/users/testuser')
-          .send({
-            name: 'Updated Name',
-            password: 'newpassword',
-          });
+        const res = await chai.request(app).put('/api/users/testuser').send({
+          name: 'Updated Name',
+          password: 'newpassword',
+        });
 
         expect(res).to.have.status(498);
       });
