@@ -7,7 +7,7 @@ const allowedExtensions = ['.jpg', '.jpeg', '.png'];
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    console.log('from destination',file);
+    console.log('from destination', file);
     const folderName =
       process.env.NODE_ENV === 'test' ? 'test_uploads' : 'uploads';
     if (!fs.existsSync(folderName)) {
@@ -29,12 +29,12 @@ const upload = multer({
   limits: { fileSize: 1024 * 1024, files: 5 },
   fileFilter: (req, file, cb) => {
     const ext = path.extname(file.originalname).toLowerCase();
-    console.log('from ext',ext)
+    console.log('from ext', ext);
     if (!allowedExtensions.includes(ext)) {
-      console.log('here')
+      console.log('here');
       return cb(new Error('Only images allowed!'));
     }
-    console.log('im here')
+    console.log('im here');
     cb(null, true);
   },
 });

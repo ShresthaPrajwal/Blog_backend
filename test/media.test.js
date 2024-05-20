@@ -196,7 +196,7 @@ describe('MEDIA API', () => {
         .post('/api/media')
         .set('Authorization', `Bearer ${token}`)
         .attach('image', filePath);
-      console.log(res.body)
+      console.log(res.body);
       expect(res).to.have.status(500);
       expect(res.body).to.have.property('error', 'Only images allowed!');
     });
@@ -293,13 +293,12 @@ describe('MEDIA API', () => {
 
   describe('DELETE /api/media/:id', () => {
     it('should delete media successfully', async () => {
-
       const resp = await chai.request(app).get(`/api/media/${uploadedMediaId}`);
       const res = await chai
         .request(app)
         .delete(`/api/media/${uploadedMediaId}`)
         .set('Authorization', `Bearer ${token}`);
-      console.log(resp.body)
+      console.log(resp.body);
       expect(res).to.have.status(200);
       expect(res.body).to.have.property('message', 'Media Deleted Succesfully');
       fs.access(resp.body.results.paths[0].path, fs.constants.F_OK, (err) => {
