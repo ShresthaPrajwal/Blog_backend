@@ -5,16 +5,12 @@ const bcrypt = require('bcrypt');
 
 const app = require('../app');
 const User = require('../models/usersModel');
-const Media = require('../models/mediaModel');
-const Blog = require('../models/blogModel');
+
 chai.use(chaiHttp);
 
 describe('LOGIN API', () => {
-  let token;
   after(async () => {
     await User.deleteMany({});
-    await Blog.deleteMany({});
-    await Media.deleteMany({});
   });
 
   before(async function () {
@@ -36,8 +32,6 @@ describe('LOGIN API', () => {
     expect(res.body).to.have.property('token');
     expect(res.body).to.have.property('username', 'testuser');
     expect(res.body).to.have.property('name', 'Test User');
-
-    token = res.body.token;
   });
 
   it('should return an error for invalid credentials', async () => {
@@ -50,6 +44,16 @@ describe('LOGIN API', () => {
     expect(res.body).to.have.property('error', 'invalid username or password');
   });
 
+  it('should return an error for empty username field', async () => {
+    const res = await chai.request(app).post('/api/login').send({
+      username: '',
+      password: 'randompassword',
+    });
+
+    expect(res).to.have.status(401);
+    expect(res.body).to.have.property('error', 'Empty Username');
+  });
+
   it('should return an error for empty password field', async () => {
     const res = await chai.request(app).post('/api/login').send({
       username: 'testuser',
@@ -57,12 +61,32 @@ describe('LOGIN API', () => {
     });
 
     expect(res).to.have.status(401);
-    expect(res.body).to.have.property('error', 'invalid username or password');
+    expect(res.body).to.have.property('error', 'Empty Password');
+  });
+
+  it('should return an error for both username and password fields being empty', async () => {
+    const res = await chai.request(app).post('/api/login').send({
+      username: '',
+      password: '',
+    });
+
+    expect(res).to.have.status(401);
+    expect(res.body).to.have.property('error', 'Empty Username and Password');
   });
 
   it('should return an error for invalid username', async () => {
     const res = await chai.request(app).post('/api/login').send({
       username: 'nonexistentuser',
+      password: 'password123',
+    });
+
+    expect(res).to.have.status(401);
+    expect(res.body).to.have.property('error', 'invalid username or password');
+  });
+
+  it('should return an error for case-sensitive username mismatch', async () => {
+    const res = await chai.request(app).post('/api/login').send({
+      username: 'TestUser',
       password: 'password123',
     });
 

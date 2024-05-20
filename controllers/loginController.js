@@ -7,6 +7,22 @@ async function loginController(request, response, next) {
   try {
     const { username, password } = request.body;
 
+    if (username === '' && password === '') {
+      return response.status(401).json({
+        error: 'Empty Username and Password',
+      });
+    }
+    if (username === '') {
+      return response.status(401).json({
+        error: 'Empty Username',
+      });
+    }
+    if (password === '') {
+      return response.status(401).json({
+        error: 'Empty Password',
+      });
+    }
+
     const user = await User.findOne({ username });
     const passwordCorrect =
       user === null ? false : await bcrypt.compare(password, user.passwordHash);

@@ -11,7 +11,6 @@ if (env === 'test') {
 } else {
   workingURI = MONGO_URI;
 }
-console.log(workingURI);
 mongoose
   .connect(workingURI)
   .then(() => {
