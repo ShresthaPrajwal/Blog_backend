@@ -6,6 +6,7 @@ const success = require('../middlewares/responseApi');
 
 async function uploadMedia(req, res, next) {
   try {
+    console.log('from uploadMedia',req.files)
     if (!req.files || req.files.length === 0) {
       const error = new Error('No files uploaded');
       error.status = 400;

@@ -22,7 +22,7 @@ const multerErrorHandler = (err, req, res, next) => {
   if (err) {
     return res
       .status(500)
-      .json({ message: 'Internal server error', error: err.message });
+      .json({ message: 'Internal server error', error:  'error here'});
   }
   next();
 };
