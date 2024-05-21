@@ -5,10 +5,19 @@ const convertToSlug = require('../utils/slugify');
 async function uploadBlog(req, res, next) {
   try {
     const newBlog = new Blog();
-    newBlog.title = req.body.title || 'Title';
-    newBlog.content = req.body.content || 'Content';
-    newBlog.featuredImage = req.body.featuredImage;
-    newBlog.media = req.body.media;
+
+    const { title, content, featuredImage, media } = req.body;
+
+    if (!title) {
+      res.status(400).json({ message: 'title is required' });
+    }
+    if (!content) {
+      res.status(400).json({ message: 'content is required' });
+    }
+    newBlog.title = title;
+    newBlog.content = content;
+    newBlog.featuredImage = featuredImage || null;
+    newBlog.media = media;
 
     const slug = await convertToSlug(newBlog.title);
     newBlog.slug = slug;

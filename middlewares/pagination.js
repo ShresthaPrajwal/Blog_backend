@@ -24,7 +24,7 @@ const paginationMiddleware =
 
       const results = await Model.find(query)
         .sort(sortOptions)
-        .limit(size)
+        .limit(parseInt(size, 10))
         .skip(currentSkip)
         .populate(populate);
       const baseUrl = `${req.protocol}://${req.header('Host')}/api/${base}`;
@@ -44,7 +44,7 @@ const paginationMiddleware =
         pagination: {
           currentPage,
           totalPages,
-          perPage: size,
+          perPage: parseInt(size, 10),
           totalItems: totalModels,
           nextPageUrl,
           prevPageUrl,

@@ -1,10 +1,12 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+const chaiSorted = require('chai-sorted');
 const { expect } = chai;
 const app = require('../app');
 const Media = require('../models/mediaModel');
 const User = require('../models/usersModel');
 chai.use(chaiHttp);
+chai.use(chaiSorted);
 const bcrypt = require('bcrypt');
 const path = require('path');
 const fs = require('fs');
@@ -59,7 +61,6 @@ describe('MEDIA API', () => {
         .post('/api/media')
         .set('Authorization', `Bearer ${token}`)
         .attach('image', filePath);
-      console.log(res.body)
       expect(res).to.have.status(201);
       expect(res.body.results[0].paths[0].path).to.exist;
       fs.access(res.body.results[0].paths[0].path, fs.constants.F_OK, (err) => {
@@ -162,8 +163,6 @@ describe('MEDIA API', () => {
         'Media Uploaded Successfully',
       );
       expect(res.body.results[0]).to.have.property('paths').that.is.an('array');
-
-
     });
     it('should not upload more than threshold number of media', async () => {
       const filepath = path.join('./public', 'sign.jpeg');
@@ -208,7 +207,7 @@ describe('MEDIA API', () => {
       expect(res).to.have.status(500);
       expect(res.body).to.have.property('error', 'Only images allowed!');
     });
-    
+
     it('should return 400 if no files are uploaded', async () => {
       const res = await chai
         .request(app)
@@ -277,14 +276,14 @@ describe('MEDIA API', () => {
       expect(res.body.results.caption).to.equal(newCaption);
       expect(res.body.results.alternateText).to.equal(newAlternateText);
     });
-     it('should return 404 if media id is not given', async () => {
-       const res = await chai
-         .request(app)
-         .put(`/api/media/`)
-         .set('Authorization', `Bearer invalidtoken`);
+    it('should return 404 if media id is not given', async () => {
+      const res = await chai
+        .request(app)
+        .put(`/api/media/`)
+        .set('Authorization', `Bearer invalidtoken`);
 
-       expect(res).to.have.status(404);
-     });
+      expect(res).to.have.status(404);
+    });
     it('should return 498 when attempting to edit media without authentication', async () => {
       const newCaption = 'This is an edited caption';
       const newAlternateText = 'Edited alternate text';
@@ -339,7 +338,6 @@ describe('MEDIA API', () => {
 
       expect(res).to.have.status(498);
     });
-
 
     it('should return 401 if token is invalid', async () => {
       const res = await chai
