@@ -16,7 +16,7 @@ const convertToSlug = async (string) => {
     existingBlog = await Blog.findOne({ slug: baseSlug });
     if (existingBlog) {
       baseSlug += `-${count}`;
-      count=count+1;
+      count += 1;
     }
   } while (existingBlog);
 
