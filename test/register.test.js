@@ -170,7 +170,7 @@ describe('REGISTER API', () => {
 
         expect(res).to.have.status(404);
       });
-      it('should return 400 if username is not provided', async () => {
+      it('should return 404 if username is not provided', async () => {
         const res = await chai
           .request(app)
           .put('/api/users/')

@@ -9,12 +9,17 @@ const config = {
 
 const convertToSlug = async (string) => {
   let baseSlug = slugify(string, config);
-  const existingBlog = await Blog.findOne({ slug: baseSlug });
+  let count = 1;
+  let existingBlog;
 
-  if (existingBlog) {
-    const uuid = uuidv4();
-    baseSlug += `-${uuid}`;
-  }
+  do {
+    existingBlog = await Blog.findOne({ slug: baseSlug });
+    if (existingBlog) {
+      baseSlug += `-${count}`;
+      count += 1;
+    }
+  } while (existingBlog);
+
   return baseSlug;
 };
 
