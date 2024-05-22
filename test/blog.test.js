@@ -61,7 +61,7 @@ describe('BLOG API', () => {
       );
       expect(res.body.data).to.have.property('title', blogData.title);
       expect(res.body.data).to.have.property('featuredImage');
-      expect(res.body.data).to.have.property('slug');
+      expect(res.body.data).to.have.property('slug');//update here
 
       uploadedBlogSlug = res.body.data.slug;
     });
@@ -194,7 +194,7 @@ describe('BLOG API', () => {
     before(async () => {
       for (let i = 1; i <= 5; i++) {
         const blogData = {
-          title: `Test Title ${i}`,
+          title: `Test Title`,
           content: `This is some blog content ${i}`,
           featuredImage: `${uploadedMediaId}`,
           media: [`${uploadedMediaId}`],
@@ -269,7 +269,7 @@ describe('BLOG API', () => {
         expect(res.body.data).to.be.sortedBy('title', { descending: true });
       });
 
-      it('should filter blogs by search query', async () => {
+      it('should filter blogs by search query', async () => {//naauni ni garni
         const res = await chai
           .request(app)
           .get('/api/blogs?search=Test Title 1');
