@@ -1,12 +1,11 @@
-const loginDocs = require('../docs/login');
-const userDocs = require('../docs/user');
-const mediaDocs = require('../docs/media');
-const blogDocs = require('../docs/blog');
+const loginDocs = require('./login');
+const userDocs = require('./user');
+const mediaDocs = require('./media');
+const blogDocs = require('./blog');
 
-const userSchemaDocs = require('../docs/schema/user');
-const mediaSchemaDocs = require('../docs/schema/media');
-const blogSchemaDocs = require('../docs/schema/blog');
-
+const userSchemaDocs = require('./schema/user');
+const mediaSchemaDocs = require('./schema/media');
+const blogSchemaDocs = require('./schema/blog');
 
 const paths = {
   ...loginDocs.paths,
@@ -30,4 +29,4 @@ const components = {
   },
 };
 
-module.exports = {paths,tags,components};
+module.exports = { paths, tags, components };

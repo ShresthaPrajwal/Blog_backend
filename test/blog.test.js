@@ -61,7 +61,7 @@ describe('BLOG API', () => {
       );
       expect(res.body.data).to.have.property('title', blogData.title);
       expect(res.body.data).to.have.property('featuredImage');
-      expect(res.body.data).to.have.property('slug');//update here
+      expect(res.body.data).to.have.property('slug'); //update here
 
       uploadedBlogSlug = res.body.data.slug;
     });
@@ -269,7 +269,8 @@ describe('BLOG API', () => {
         expect(res.body.data).to.be.sortedBy('title', { descending: true });
       });
 
-      it('should filter blogs by search query', async () => {//naauni ni garni
+      it('should filter blogs by search query', async () => {
+        //naauni ni garni
         const res = await chai
           .request(app)
           .get('/api/blogs?search=Test Title 1');

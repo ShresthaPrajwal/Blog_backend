@@ -8,7 +8,7 @@ const getUser = async (request, response) => {
 
 const addUser = async (request, response, next) => {
   try {
-    const { username='', name='', password='' } = request.body;
+    const { username = '', name = '', password = '' } = request.body;
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(password, saltRounds);
 
