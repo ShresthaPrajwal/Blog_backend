@@ -47,9 +47,12 @@ async function getAllMedia(req, res, next) {
     const data = await res.paginatedResults.data;
 
     const mediaWithUrls = getMediaWithUrls(req, data, next);
-    res
-      .status(200)
-      .json(success('All Media Found', {...res.paginatedResults,data:mediaWithUrls}));
+    res.status(200).json(
+      success('All Media Found', {
+        ...res.paginatedResults,
+        data: mediaWithUrls,
+      }),
+    );
   } catch (error) {
     next(error);
   }

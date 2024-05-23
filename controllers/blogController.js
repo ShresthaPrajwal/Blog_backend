@@ -39,7 +39,7 @@ async function uploadBlog(req, res, next) {
 async function getAllBlogs(req, res, next) {
   try {
     const data = await res.paginatedResults.data;
-    console.log('from getAllBlogs',data)
+    console.log('from getAllBlogs', data);
     const blogsWithUpdatedUrl = getBlogWithUrl(req, data, next);
     res.json({ ...res.paginatedResults, data: blogsWithUpdatedUrl });
   } catch (error) {

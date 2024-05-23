@@ -6,7 +6,8 @@ const multerErrorHandler = require('../utils/multerError');
 const upload = require('../utils/multer');
 const authMiddleware = require('../middlewares/authMiddleware');
 const paginationMiddleware = require('../middlewares/pagination');
-const Media = require('../models/mediaModel')
+const Media = require('../models/mediaModel');
+
 router.post(
   '/',
   authMiddleware,
@@ -15,7 +16,11 @@ router.post(
   mediaController.uploadMedia,
 );
 
-router.get('/',paginationMiddleware(Media,'media'), mediaController.getAllMedia);
+router.get(
+  '/',
+  paginationMiddleware(Media, 'media'),
+  mediaController.getAllMedia,
+);
 
 router.get('/:id', mediaController.getMediaById);
 
