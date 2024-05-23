@@ -130,7 +130,7 @@ const blogDocs = {
         },
       },
     },
-    '/blogs/{slug}': {
+    '/blogs{slug}': {
       get: {
         summary: 'Get blog by slug',
         tags: ['Blogs'],
