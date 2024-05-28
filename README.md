@@ -2,6 +2,7 @@
 # Backend Using Express.js/Node.js with MongoDB as database for blog 
 
 ## GET STARTED WITH
+Node version: 22.0.0
 ### Step 1:
 ```
 git clone https://github.com/ShresthaPrajwal/Blog_backend.git
